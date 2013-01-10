@@ -26,7 +26,6 @@
         that.isMine = false;
         that.numberOfAdjacentMines = 0;
 
-        document.addEventListener("mousedown", that.click, false);
 
         /**
         * Draw the tile to the canvas
@@ -59,12 +58,135 @@
                 }
             }
         };
-
-        that.click = function () {
-            console.log('daron');
-        }
     }
 
+    /**
+    * Board object, where tiles are drawn
+    */
+    function Board(width, height, tileSize) {
+        var that = this;
+
+        that.width = width;
+        that.height = height;
+        that.tileSize = tileSize;
+        that.tiles = [];
+
+
+        /**
+        * Clear canvas; draw background
+        */
+        that.clear = function () {
+            // resetting canvas width causes it to reinitialize
+            canvas.width = canvas.width;
+
+            ctx.fillStyle = "#002b36";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        };
+
+        /**
+        * Initialize the board
+        */
+        that.init = function () {
+            var i, j;
+
+            // Initialize the board array
+            for (i = width - 1; i >= 0; i -= 1) {
+                that.tiles[i] = [];
+                for (j = height - 1; j >= 0; j -= 1) {
+                    that.tiles[i][j] = new Tile(tileSize, i, j);
+                }
+            }
+        }
+
+        /**
+        * Draw every tile
+        */
+        that.draw = function () {
+            var i,
+                j;
+
+            for (i = that.width - 1; i >= 0; i -= 1) {
+                for (j = that.height - 1; j >= 0; j -= 1) {
+                    that.tiles[i][j].draw();
+                }
+            }
+        };
+
+        /**
+        * Reveal the whole board
+        */
+        that.reveal = function () {
+            var i,
+                j;
+
+            for (i = that.width - 1; i >= 0; i -= 1) {
+                for (j = that.height - 1; j >= 0; j -= 1) {
+                    that.tiles[i][j].isHidden = false;
+                }
+            }
+
+            that.draw();
+        }
+
+        /**
+        * Randomly scatter mines on the field
+        */
+        that.addMines = function (numberOfMines) {
+            var i,
+                x,
+                y;
+
+            x = Math.floor(Math.random() * that.width);
+            y = Math.floor(Math.random() * that.height);
+            for (i = numberOfMines - 1; i >= 0; i -= 1) {
+                // check if already mine
+                while (that.tiles[x][y].isMine) {
+                    x = Math.floor(Math.random() * that.width);
+                    y = Math.floor(Math.random() * that.height);
+                }
+                that.tiles[x][y].isMine = true;
+            }
+
+            that.setAdjacentMines();
+        };
+
+        that.setAdjacentMines = function () {
+            var i,
+                j;
+
+            for (i = that.width - 1; i >= 0; i -= 1) {
+                for (j = that.height - 1; j >= 0; j -= 1) {
+                    that.computeAdjacentMines(i, j);
+                }
+            }
+        };
+
+
+        /**
+        * Compute the number of adjacent mines of tile x, y
+        */
+        that.computeAdjacentMines = function (x, y) {
+            var i, j,
+                width = that.tiles.length,
+                height = that.tiles[0].length,
+                count = 0;
+
+            for (i = -1; i <= 1; i += 1) {
+                for (j = -1; j <= 1; j += 1) {
+                    // inside canvas ?
+                    if ((x + i >= 0) && (x + i < width)
+                        && (y + j >= 0) && (y + j < height)) {
+                        // is a mine ?
+                        if (that.tiles[x + i][y + j].isMine) {
+                            count += 1;
+                        }
+                    }
+                }
+            }
+
+            that.tiles[x][y].numberOfAdjacentMines = count;
+        };
+    }
 
 
     /**
@@ -76,29 +198,52 @@
         that.width = width;
         that.height = height;
         that.tileSize = tileSize;
-        that.board = [];
+        that.board = new Board(that.width, that.height, that.tileSize);
         that.mines = [];
         that.numberOfMines = numberOfMines;
 
-        /**
-        * Randomly scatter mines on the field
-        */
-        that.setMines = function () {
-            var i,
-                x,
-                y;
 
-            x = Math.random() * that.width;
-            y = Math.random() * that.height;
-            for (i = numberOfMines - 1; i >= 0; i -= 1) {
-                // check if already mine
-                while (that.board[x][y].isMine) {
-                    x = Math.random() * that.width;
-                    y = Math.random() * that.height;
-                }
-                that.board[x][y].isMine = true;
+        /**
+        * Called when all mines are found or when a mine is clicked
+        */
+        that.gameOver = function (won) {
+            if (won) {
+
+            } else {
+                that.board.reveal();
             }
         };
+
+        /**
+        * Click handler
+        */
+        that.click = function (e) {
+            var mouseX, mouseY,
+                clickedTile;
+
+            if(e.offsetX) {
+                mouseX = e.offsetX;
+                mouseY = e.offsetY;
+            }
+            else if(e.layerX) {
+                mouseX = e.layerX;
+                mouseY = e.layerY;
+            }
+
+            // normalize by tile size to get the tile coordinates
+            mouseX = Math.floor(mouseX / that.tileSize);
+            mouseY = Math.floor(mouseY / that.tileSize);
+
+            clickedTile = that.board.tiles[mouseX][mouseY];
+            clickedTile.isHidden = false;
+            clickedTile.draw();
+
+            if (clickedTile.isMine) {
+                that.gameOver(false);
+            } else {
+            }
+        }
+
 
         /**
         * Main game loop
@@ -117,51 +262,25 @@
             canvas.width = width * tileSize;
             canvas.height = height * tileSize;
 
-            // Initialize the board array
-            for (i = width - 1; i >= 0; i -= 1) {
-                that.board[i] = [];
-                for (j = height - 1; j >= 0; j -= 1) {
-                    that.board[i][j] = new Tile(tileSize, i, j);
-                }
-            }
+            // Add mouse support
+            canvas.addEventListener("click", that.click, false);
 
-            that.setMines();
+            that.board.init();
 
-            that.clearScreen();
+            that.board.addMines(that.numberOfMines);
+
+            that.board.clear();
+            that.board.draw();
 
             that.mainLoop();
         };
 
-        /**
-        * Clear canvas; draw background
-        */
-        that.clearScreen = function () {
-            // resetting canvas width causes it to reinitialize
-            canvas.width = canvas.width;
 
-            ctx.fillStyle = "#002b36";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-        };
-
-        /**
-        * Draw every tile
-        */
-        that.drawBoard = function () {
-            var i,
-                j;
-
-            for (i = that.width - 1; i >= 0; i -= 1) {
-                for (j = that.height - 1; j >= 0; j -= 1) {
-                    that.board[i][j].draw();
-                }
-            }
-        };
     }
 
 
-    game = new Game(10, 10, 25);
+    game = new Game(10, 12, 25, 20);
     game.begin();
-    game.drawBoard();
 
 
 }());

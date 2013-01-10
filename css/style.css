@@ -3,6 +3,7 @@ body {
 }
 
 .canvas {
+    position: relative;
     width: 500;
     height: 500;
 }
