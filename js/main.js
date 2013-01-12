@@ -192,76 +192,110 @@
         */
         that.revealEmptyTiles = function (xInit, yInit) {
             console.log('click');
-            var x = xInit,
-                y = yInit,
-                width = that.tiles.length,
-                height = that.tiles[0].length,
-                currentTile = that.tiles[x][y];
+            // var x = xInit,
+            //     y = yInit,
+            //     width = that.tiles.length,
+            //     height = that.tiles[0].length,
+            //     currentTile = that.tiles[x][y];
 
-            while (currentTile.numberOfAdjacentMines === 0 && x < width) {
-                that.clearColumn(x, y);
-                x += 1;
-            }
+            // while (currentTile.numberOfAdjacentMines === 0 && x < width) {
+            //     that.clearColumn(x, y);
+            //     x += 1;
+            // }
 
-            x = xInit;
-            currentTile = that.tiles[x][y];
-            while (currentTile.numberOfAdjacentMines === 0 && x >= 0) {
-                that.clearColumn(x, y);
-                x -= 1;
-            }
+            // x = xInit;
+            // currentTile = that.tiles[x][y];
+            // while (currentTile.numberOfAdjacentMines === 0 && x >= 0) {
+            //     that.clearColumn(x, y);
+            //     x -= 1;
+            // }
+            that.revealAroundTile(xInit, yInit);
 
             that.draw();
         };
 
         /**
-        * Clear a row of empty tiles
+        * Reaveal the tiles surrounding a empty one if they are not mines
         */
-        that.clearRow = function (xInit, yInit) {
-            var x = xInit,
-                y = yInit,
+        that.revealAroundTile = function (x, y) {
+            var i, j,
                 width = that.tiles.length,
-                currentTile = that.tiles[xInit][yInit];
-
-            while (currentTile.numberOfAdjacentMines === 0 && x < width) {
-                console.log(x, y);
-                currentTile = that.tiles[x][y];
-                that.clearColumn(x, y);
-                x += 1;
-            }
-
-            x = xInit;
-            currentTile = that.tiles[x][y];
-            while (currentTile.numberOfAdjacentMines === 0 && x >= 0) {
-                currentTile = that.tiles[x][y];
-                that.clearColumn(x, y);
-                x -= 1;
-            }
-        };
-
-        /**
-        * Clear a column of empty tiles
-        */
-        that.clearColumn = function (xInit, yInit) {
-            var x = xInit,
-                y = yInit,
                 height = that.tiles[0].length,
-                currentTile = that.tiles[xInit][yInit];
-
-            while (currentTile.numberOfAdjacentMines === 0 && y < height) {
-                console.log(x, y);
+                count = 0,
                 currentTile = that.tiles[x][y];
-                currentTile.isHidden = 0;
-                y += 1;
-            }
 
-            y = yInit;
-            currentTile = that.tiles[x][y];
-            while (currentTile.numberOfAdjacentMines === 0 && y >= 0) {
-                currentTile = that.tiles[x][y];
-                currentTile.isHidden = 0;
-                y -= 1;
+            if (that.tiles[x][y].numberOfAdjacentMines === 0) {
+
+                for (i = -1; i <= 1; i += 1) {
+                    for (j = -1; j <= 1; j += 1) {
+                        // inside canvas ?
+                        if ((x + i >= 0) && (x + i < width)
+                            && (y + j >= 0) && (y + j < height)) {
+                            // is a mine ?
+                            currentTile = that.tiles[x + i][y + j];
+                            console.log(x+i, y+j);
+                            if (!currentTile.isMine) {
+                                currentTile.isHidden = false;
+                            }
+                        }
+                    }
+                }
+
+                that.tiles[x][y].isHidden = false;
             }
-        };
+        }
+
+        // /**
+        // * Clear a row of empty tiles
+        // */
+        // that.clearRow = function (xInit, yInit) {
+        //     var x = xInit,
+        //         y = yInit,
+        //         width = that.tiles.length,
+        //         currentTile = that.tiles[xInit][yInit];
+
+        //     // to the right
+        //     while (currentTile.numberOfAdjacentMines === 0 && x < width) {
+        //         console.log(x, y);
+        //         currentTile = that.tiles[x][y];
+        //         that.clearColumn(x, y);
+        //         x += 1;
+        //     }
+
+        //     // and to the left
+        //     x = xInit;
+        //     currentTile = that.tiles[x][y];
+        //     while (currentTile.numberOfAdjacentMines === 0 && x >= 0) {
+        //         currentTile = that.tiles[x][y];
+        //         that.clearColumn(x, y);
+        //         x -= 1;
+        //     }
+        // };
+
+        // /**
+        // * Clear a column of empty tiles
+        // */
+        // that.clearColumn = function (xInit, yInit) {
+        //     var x = xInit,
+        //         y = yInit,
+        //         height = that.tiles[0].length,
+        //         currentTile = that.tiles[xInit][yInit];
+
+        //     while (currentTile.numberOfAdjacentMines === 0 && y < height) {
+        //         console.log(x, y);
+        //         currentTile = that.tiles[x][y];
+        //         currentTile.isHidden = 0;
+        //         y += 1;
+        //     }
+
+        //     y = yInit;
+        //     currentTile = that.tiles[x][y];
+        //     while (currentTile.numberOfAdjacentMines === 0 && y >= 0) {
+        //         currentTile = that.tiles[x][y];
+        //         currentTile.isHidden = 0;
+        //         y -= 1;
+        //     }
+        // };
     }
 
 
@@ -358,7 +392,7 @@
     }
 
 
-    game = new Game(10, 12, 25, 10);
+    game = new Game(10, 13, 25, 12);
     game.begin();
 
 
