@@ -192,50 +192,40 @@
         */
         that.revealEmptyTiles = function (xInit, yInit) {
             console.log('click');
-            // var x = xInit,
-            //     y = yInit,
-            //     width = that.tiles.length,
-            //     height = that.tiles[0].length,
-            //     currentTile = that.tiles[x][y];
 
-            // while (currentTile.numberOfAdjacentMines === 0 && x < width) {
-            //     that.clearColumn(x, y);
-            //     x += 1;
-            // }
-
-            // x = xInit;
-            // currentTile = that.tiles[x][y];
-            // while (currentTile.numberOfAdjacentMines === 0 && x >= 0) {
-            //     that.clearColumn(x, y);
-            //     x -= 1;
-            // }
-            that.revealAroundTile(xInit, yInit);
+            that.recursiveReveal(that.revealAroundTile([xInit, yInit]));
 
             that.draw();
         };
 
         /**
-        * Reaveal the tiles surrounding a empty one if they are not mines
+        * Reveal the tiles surrounding a empty one if they are not mines
         */
-        that.revealAroundTile = function (x, y) {
-            var i, j,
+        that.revealAroundTile = function (coords) {
+            var x = coords[0], y = coords[1],
+                i, j,
                 width = that.tiles.length,
                 height = that.tiles[0].length,
                 count = 0,
-                currentTile = that.tiles[x][y];
+                currentTile = that.tiles[x][y],
+                tilesToClear = [];
 
-            if (that.tiles[x][y].numberOfAdjacentMines === 0) {
+            if (currentTile.numberOfAdjacentMines === 0) {
 
                 for (i = -1; i <= 1; i += 1) {
                     for (j = -1; j <= 1; j += 1) {
                         // inside canvas ?
                         if ((x + i >= 0) && (x + i < width)
                             && (y + j >= 0) && (y + j < height)) {
-                            // is a mine ?
+                            // is not a mine ?
                             currentTile = that.tiles[x + i][y + j];
-                            console.log(x+i, y+j);
                             if (!currentTile.isMine) {
                                 currentTile.isHidden = false;
+                            }
+                            // add tiles to clear to array
+                            if ((currentTile.numberOfAdjacentMines === 0)   // empty tile
+                                && (Math.abs(i + j) === 1)) {  // not the original nor diagonal
+                                tilesToClear.push([x+i, y+j]);
                             }
                         }
                     }
@@ -243,59 +233,26 @@
 
                 that.tiles[x][y].isHidden = false;
             }
+
+            return tilesToClear;
         }
 
-        // /**
-        // * Clear a row of empty tiles
-        // */
-        // that.clearRow = function (xInit, yInit) {
-        //     var x = xInit,
-        //         y = yInit,
-        //         width = that.tiles.length,
-        //         currentTile = that.tiles[xInit][yInit];
-
-        //     // to the right
-        //     while (currentTile.numberOfAdjacentMines === 0 && x < width) {
-        //         console.log(x, y);
-        //         currentTile = that.tiles[x][y];
-        //         that.clearColumn(x, y);
-        //         x += 1;
-        //     }
-
-        //     // and to the left
-        //     x = xInit;
-        //     currentTile = that.tiles[x][y];
-        //     while (currentTile.numberOfAdjacentMines === 0 && x >= 0) {
-        //         currentTile = that.tiles[x][y];
-        //         that.clearColumn(x, y);
-        //         x -= 1;
-        //     }
-        // };
-
-        // /**
-        // * Clear a column of empty tiles
-        // */
-        // that.clearColumn = function (xInit, yInit) {
-        //     var x = xInit,
-        //         y = yInit,
-        //         height = that.tiles[0].length,
-        //         currentTile = that.tiles[xInit][yInit];
-
-        //     while (currentTile.numberOfAdjacentMines === 0 && y < height) {
-        //         console.log(x, y);
-        //         currentTile = that.tiles[x][y];
-        //         currentTile.isHidden = 0;
-        //         y += 1;
-        //     }
-
-        //     y = yInit;
-        //     currentTile = that.tiles[x][y];
-        //     while (currentTile.numberOfAdjacentMines === 0 && y >= 0) {
-        //         currentTile = that.tiles[x][y];
-        //         currentTile.isHidden = 0;
-        //         y -= 1;
-        //     }
-        // };
+        /**
+        * Recursive function used to reveal empty tiles
+        */
+        that.recursiveReveal = function(tilesToClear) {
+            var arr = [];
+            if (tilesToClear === []) {
+                return false;
+            } else if (tilesToClear.length === 1) {
+                return that.revealAroundTile(tilesToClear[0]);
+            } else {
+                console.log(tilesToClear);
+                arr = that.revealAroundTile(tilesToClear.shift()).concat(that.recursiveReveal(tilesToClear));
+                console.log(arr);
+                return arr;
+            }
+        }
     }
 
 
@@ -392,7 +349,7 @@
     }
 
 
-    game = new Game(10, 13, 25, 12);
+    game = new Game(10, 13, 25, 5);
     game.begin();
 
 
