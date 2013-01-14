@@ -54,7 +54,7 @@
                 // Print number of adjacent mines
                 if (that.numberOfAdjacentMines !== 0) {
                     ctx.fillStyle = "#333";
-                    ctx.font = "15px 'Impact', 'Arial', sans-serif";
+                    ctx.font = "15px 'BebasNeueRegular', 'Arial', sans-serif";
                     ctx.fillText(that.numberOfAdjacentMines,
                                  x + 9, y + that.size - 5);
                 }
@@ -89,22 +89,14 @@
         // initialize with all tiles hidden
         that.numberOfHiddenTiles = width * height;
 
-        /**
-        * Clear canvas; draw background
-        */
-        that.clear = function () {
-            // resetting canvas width causes it to reinitialize
-            canvas.width = canvas.width;
-
-            ctx.fillStyle = "#333";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-        };
 
         /**
         * Initialize the board
         */
         that.init = function () {
             var i, j;
+
+            that.numberOfHiddenTiles = width * height;
 
             // Initialize the board array
             for (i = width - 1; i >= 0; i -= 1) {
@@ -228,7 +220,6 @@
             if (that.tiles[xInit][yInit].numberOfAdjacentMines === 0) {
                 clickedArr = that.revealAroundTile([xInit, yInit]);
                 that.recursiveReveal(clickedArr);
-            } else {
             }
 
             that.draw();
@@ -277,6 +268,7 @@
                 }
                 that.tiles[x][y].isHidden = false;
             }
+
             return tilesToClear;
         };
 
@@ -330,7 +322,19 @@
         that.numberOfMines = numberOfMines;
         that.isFirstClick = true;
         that.timer = {};
+        that.time = 0;
 
+        /**
+        * Draw a dialog to ask if the player wants to play again
+        */
+        that.promptNewGame = function () {
+            ctx.fillStyle = '#333';
+            ctx.fillRect(25, 50, 201, 51);
+            ctx.fillStyle = '#eee';
+            ctx.fillText('Click to start new game', 70, 80);
+
+
+        };
 
         /**
         * Called when all mines are found or when a mine is clicked
@@ -340,15 +344,18 @@
             clearInterval(that.timer);
 
             if (won) {
-                that.drawGUI('Congratulations!');
+                that.drawGUI('Congratulations! Score: ' + that.time
+                             + 's. Click to play again');
             } else {
-                that.drawGUI('Game over!');
+                that.drawGUI('Game over! Click to play again');
             }
 
             // reveal the mines
             that.board.revealAll();
 
-            // that.promptNewGame();
+            // on click, start new game
+            canvas.removeEventListener("click");
+            canvas.addEventListener("click", that.init, false);
         };
 
         /**
@@ -392,7 +399,6 @@
                         that.gameOver(true);
                     }
                 }
-                console.log(that.board.numberOfHiddenTiles);
             }
         };
 
@@ -404,7 +410,7 @@
             ctx.fillRect(0, canvas.height - that.guiHeight,
                          canvas.width, that.guiHeight);
             ctx.fillStyle = "#eee";
-            ctx.font = "15px 'Impact', 'Arial', sans-serif";
+            ctx.font = "15px 'BebasNeueRegular', 'Arial', sans-serif";
 
             ctx.fillText(text, 7, canvas.height - 7);
         };
@@ -413,18 +419,17 @@
         * Timer
         */
         that.startTimer = function () {
-            var time = 0;
             that.drawGUI('Time: 0');
             that.timer = setInterval(function () {
-                that.drawGUI('Time: ' + time);
-                time += 1;
+                that.drawGUI('Time: ' + that.time);
+                that.time += 1;
             }, 1000);
         };
 
         /**
         * Game initialization
         */
-        that.begin = function () {
+        that.init = function () {
             var i, j;
 
             // Set up the canvas
@@ -432,22 +437,25 @@
             canvas.height = height * that.tileSize + that.guiHeight;
 
             // Add mouse support
+            canvas.removeEventListener("click", that.init);
             canvas.addEventListener("click", that.click, false);
+            that.isFirstClick = true;
+
+            // initialize time
+            that.time = 0;
 
             that.board.init();
-            that.board.clear();
+
+            that.board.draw();
+            that.drawGUI('Game started, waiting for click...');
 
             tileSprite.onload = function () {
                 that.board.draw();
-                console.log('Game initialized');
             };
         };
     }
 
-
-    game = new Game(10, 12, 50);
-    game.begin();
+    game = new Game(10, 12, 3);
+    game.init();
 
 }());
-
-
