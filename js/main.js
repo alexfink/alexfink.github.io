@@ -4,7 +4,6 @@
 /*jslint devel: true*/
 /*jslint maxlen: 80 */
 
-
 (function () {
     "use strict";
 
@@ -25,6 +24,7 @@
         that.isHidden = true;
         that.isMine = false;
         that.numberOfAdjacentMines = 0;
+        that.wasSearched = false;
 
 
         /**
@@ -193,7 +193,9 @@
         that.revealEmptyTiles = function (xInit, yInit) {
             console.log('click');
 
-            that.recursiveReveal(that.revealAroundTile([xInit, yInit]));
+            var clicked = that.revealAroundTile([xInit, yInit]);
+
+            that.recursiveReveal(clicked);
 
             that.draw();
         };
@@ -210,6 +212,7 @@
                 currentTile = that.tiles[x][y],
                 tilesToClear = [];
 
+            currentTile.wasSearched = true;
             if (currentTile.numberOfAdjacentMines === 0) {
 
                 for (i = -1; i <= 1; i += 1) {
@@ -219,13 +222,20 @@
                             && (y + j >= 0) && (y + j < height)) {
                             // is not a mine ?
                             currentTile = that.tiles[x + i][y + j];
+
+                            // add tiles to clear to array
+                            // empty tile
+                            if ((currentTile.numberOfAdjacentMines === 0)
+                                // not the clicked nor diagonal
+                                && (Math.abs(i + j) === 1)
+                                // not already visible
+                                && (!currentTile.wasSearched)) {
+                                tilesToClear.push([x + i, y + j]);
+                            }
+
+                            // show current tile
                             if (!currentTile.isMine) {
                                 currentTile.isHidden = false;
-                            }
-                            // add tiles to clear to array
-                            if ((currentTile.numberOfAdjacentMines === 0)   // empty tile
-                                && (Math.abs(i + j) === 1)) {  // not the original nor diagonal
-                                tilesToClear.push([x+i, y+j]);
                             }
                         }
                     }
@@ -241,15 +251,20 @@
         * Recursive function used to reveal empty tiles
         */
         that.recursiveReveal = function(tilesToClear) {
-            var arr = [];
-            if (tilesToClear === []) {
-                return false;
+            var arr = [],
+                idx = 0,
+                first;
+            if (tilesToClear.length === 0) {
+                return [];
             } else if (tilesToClear.length === 1) {
-                return that.revealAroundTile(tilesToClear[0]);
+                // clear around this tile
+                arr = that.revealAroundTile(tilesToClear[0]);
+                // and start again on the tiles around it
+                return that.recursiveReveal(arr);
             } else {
-                console.log(tilesToClear);
-                arr = that.revealAroundTile(tilesToClear.shift()).concat(that.recursiveReveal(tilesToClear));
-                console.log(arr);
+                first = tilesToClear.shift();
+                arr = that.recursiveReveal([first])
+                    .concat(that.recursiveReveal(tilesToClear));
                 return arr;
             }
         }
@@ -268,6 +283,7 @@
         that.board = new Board(that.width, that.height, that.tileSize);
         that.mines = [];
         that.numberOfMines = numberOfMines;
+        that.timer;
 
 
         /**
@@ -279,6 +295,7 @@
             } else {
                 that.board.reveal();
             }
+            clearInterval(that.timer);
         };
 
         /**
@@ -319,7 +336,11 @@
         * Main game loop
         */
         that.mainLoop = function () {
-
+            var time = 0;
+            that.timer = setInterval(function () {
+                document.getElementById('time').innerHTML = time;
+                time += 1;
+            }, 1000);
         };
 
         /**
@@ -344,14 +365,11 @@
 
             that.mainLoop();
         };
-
-
     }
 
 
-    game = new Game(10, 13, 25, 5);
+    game = new Game(10, 12, 25, 20);
     game.begin();
-
 
 }());
 
