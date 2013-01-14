@@ -354,7 +354,7 @@
             that.board.revealAll();
 
             // on click, start new game
-            canvas.removeEventListener("click");
+            canvas.removeEventListener("click", that.click, false);
             canvas.addEventListener("click", that.init, false);
         };
 
@@ -437,7 +437,7 @@
             canvas.height = height * that.tileSize + that.guiHeight;
 
             // Add mouse support
-            canvas.removeEventListener("click", that.init);
+            canvas.removeEventListener("click", that.init, false);
             canvas.addEventListener("click", that.click, false);
             that.isFirstClick = true;
 
@@ -455,7 +455,11 @@
         };
     }
 
-    game = new Game(10, 12, 3);
-    game.init();
+
+    window.onload = function () {
+        console.log('start');
+        game = new Game(15, 15, 20);
+        game.init();
+    };
 
 }());
