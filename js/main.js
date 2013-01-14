@@ -9,10 +9,9 @@
 
     var canvas  = document.getElementById('canvas'),
         ctx = canvas.getContext('2d'),
-        game;
-
-    // initialize game sprites
-    var backgroundSprite = new Image(),
+        game,
+        // initialize game sprites
+        backgroundSprite = new Image(),
         mineSprite = new Image(),
         tileSprite = new Image();
 
@@ -68,6 +67,15 @@
         };
     }
 
+
+
+
+
+
+
+
+
+
     /**
     * Board object, where tiles are drawn
     */
@@ -78,7 +86,8 @@
         that.height = height;
         that.tileSize = tileSize;
         that.tiles = [];
-
+        // initialize with all tiles hidden
+        that.numberOfHiddenTiles = width * height;
 
         /**
         * Clear canvas; draw background
@@ -104,7 +113,7 @@
                     that.tiles[i][j] = new Tile(tileSize, i, j);
                 }
             }
-        }
+        };
 
         /**
         * Draw every tile
@@ -123,7 +132,7 @@
         /**
         * Reveal the whole board
         */
-        that.reveal = function () {
+        that.revealAll = function () {
             var i,
                 j;
 
@@ -134,12 +143,12 @@
             }
 
             that.draw();
-        }
+        };
 
         /**
         * Randomly scatter mines on the field
         */
-        that.addMines = function (numberOfMines) {
+        that.addMines = function (numberOfMines, mouseX, mouseY) {
             var i,
                 x,
                 y;
@@ -148,7 +157,8 @@
             y = Math.floor(Math.random() * that.height);
             for (i = numberOfMines - 1; i >= 0; i -= 1) {
                 // check if already mine
-                while (that.tiles[x][y].isMine) {
+                while ((that.tiles[x][y].isMine)
+                        || ((x === mouseX) && (y === mouseY))) {
                     x = Math.floor(Math.random() * that.width);
                     y = Math.floor(Math.random() * that.height);
                 }
@@ -158,6 +168,9 @@
             that.setAdjacentMines();
         };
 
+        /**
+        * Compute the number of adjacent mines on the whole board
+        */
         that.setAdjacentMines = function () {
             var i,
                 j;
@@ -183,7 +196,8 @@
                 for (j = -1; j <= 1; j += 1) {
                     // inside canvas ?
                     if ((x + i >= 0) && (x + i < width)
-                        && (y + j >= 0) && (y + j < height)) {
+                            && (y + j >= 0)
+                            && (y + j < height)) {
                         // is a mine ?
                         if (that.tiles[x + i][y + j].isMine) {
                             count += 1;
@@ -198,12 +212,24 @@
         /**
         * Reveal all empty tiles around the one clicked
         */
-        that.revealEmptyTiles = function (xInit, yInit) {
-            console.log('click');
+        that.reveal = function (xInit, yInit) {
+            var clickedArr,
+                clickedTile;
 
-            var clicked = that.revealAroundTile([xInit, yInit]);
+            // reveal the tile
+            clickedTile = that.tiles[xInit][yInit];
+            if (clickedTile.isHidden) {
+                clickedTile.isHidden = false;
+                that.numberOfHiddenTiles -= 1;
+            }
+            clickedTile.draw();
 
-            that.recursiveReveal(clicked);
+            // if it is empty, reveal around
+            if (that.tiles[xInit][yInit].numberOfAdjacentMines === 0) {
+                clickedArr = that.revealAroundTile([xInit, yInit]);
+                that.recursiveReveal(clickedArr);
+            } else {
+            }
 
             that.draw();
         };
@@ -221,8 +247,8 @@
                 tilesToClear = [];
 
             currentTile.wasSearched = true;
-            if (currentTile.numberOfAdjacentMines === 0) {
 
+            if (currentTile.numberOfAdjacentMines === 0) {
                 for (i = -1; i <= 1; i += 1) {
                     for (j = -1; j <= 1; j += 1) {
                         // inside canvas ?
@@ -236,47 +262,57 @@
                             if ((currentTile.numberOfAdjacentMines === 0)
                                 // not the clicked nor diagonal
                                 && (Math.abs(i + j) === 1)
-                                // not already visible
+                                // not already searched
                                 && (!currentTile.wasSearched)) {
                                 tilesToClear.push([x + i, y + j]);
                             }
 
                             // show current tile
-                            if (!currentTile.isMine) {
+                            if (!currentTile.isMine && currentTile.isHidden) {
                                 currentTile.isHidden = false;
+                                that.numberOfHiddenTiles -= 1;
                             }
                         }
                     }
                 }
-
                 that.tiles[x][y].isHidden = false;
             }
-
             return tilesToClear;
-        }
+        };
 
         /**
         * Recursive function used to reveal empty tiles
         */
-        that.recursiveReveal = function(tilesToClear) {
+        that.recursiveReveal = function (tilesToClear) {
             var arr = [],
                 idx = 0,
-                first;
+                first,
+                returned = [];
             if (tilesToClear.length === 0) {
-                return [];
+                returned = [];
             } else if (tilesToClear.length === 1) {
                 // clear around this tile
                 arr = that.revealAroundTile(tilesToClear[0]);
                 // and start again on the tiles around it
-                return that.recursiveReveal(arr);
+                returned = that.recursiveReveal(arr);
             } else {
                 first = tilesToClear.shift();
+                // clear around the first tile of the array
                 arr = that.recursiveReveal([first])
+                    // and do it on the others
                     .concat(that.recursiveReveal(tilesToClear));
-                return arr;
+                returned = arr;
             }
-        }
+
+            return returned;
+        };
     }
+
+
+
+
+
+
 
 
     /**
@@ -292,19 +328,27 @@
         that.board = new Board(that.width, that.height, that.tileSize);
         that.mines = [];
         that.numberOfMines = numberOfMines;
-        that.timer;
+        that.isFirstClick = true;
+        that.timer = {};
 
 
         /**
         * Called when all mines are found or when a mine is clicked
         */
         that.gameOver = function (won) {
-            if (won) {
-
-            } else {
-                that.board.reveal();
-            }
+            // stop timer
             clearInterval(that.timer);
+
+            if (won) {
+                that.drawGUI('Congratulations!');
+            } else {
+                that.drawGUI('Game over!');
+            }
+
+            // reveal the mines
+            that.board.revealAll();
+
+            // that.promptNewGame();
         };
 
         /**
@@ -314,11 +358,10 @@
             var mouseX, mouseY,
                 clickedTile;
 
-            if(e.offsetX) {
+            if (e.offsetX) {
                 mouseX = e.offsetX;
                 mouseY = e.offsetY;
-            }
-            else if(e.layerX) {
+            } else if (e.layerX) {
                 mouseX = e.layerX;
                 mouseY = e.layerY;
             }
@@ -327,39 +370,53 @@
             mouseX = Math.floor(mouseX / that.tileSize);
             mouseY = Math.floor(mouseY / that.tileSize);
 
-            clickedTile = that.board.tiles[mouseX][mouseY];
-            clickedTile.isHidden = false;
-            clickedTile.draw();
-
-            if (clickedTile.isMine) {
-                that.gameOver(false);
-            } else {
-                if (clickedTile.numberOfAdjacentMines === 0) {
-                    that.board.revealEmptyTiles(mouseX, mouseY);
-                }
+            // on first click, start timer and initialize
+            // the mines for the player not to click on a mine
+            if (that.isFirstClick) {
+                that.board.addMines(that.numberOfMines, mouseX, mouseY);
+                that.startTimer();
+                that.isFirstClick = false;
             }
-        }
+
+            // if we click on the board
+            if (mouseY < that.board.tiles[0].length) {
+                clickedTile = that.board.tiles[mouseX][mouseY];
+                if (clickedTile.isMine) {
+                    // game lost
+                    that.gameOver(false);
+                } else {
+                    that.board.reveal(mouseX, mouseY);
+
+                    if (that.board.numberOfHiddenTiles === that.numberOfMines) {
+                        // game won
+                        that.gameOver(true);
+                    }
+                }
+                console.log(that.board.numberOfHiddenTiles);
+            }
+        };
 
         /**
         * Draw game information on canvas
         */
-        that.drawGUI = function (time) {
+        that.drawGUI = function (text) {
             ctx.fillStyle = "#333";
-            ctx.fillRect(0, canvas.height - that.guiHeight, canvas.width, that.guiHeight);
+            ctx.fillRect(0, canvas.height - that.guiHeight,
+                         canvas.width, that.guiHeight);
             ctx.fillStyle = "#eee";
             ctx.font = "15px 'Impact', 'Arial', sans-serif";
 
-            ctx.fillText('Time: ' + time, 7, canvas.height - 7);
+            ctx.fillText(text, 7, canvas.height - 7);
         };
 
         /**
-        * Main game loop
+        * Timer
         */
-        that.mainLoop = function () {
+        that.startTimer = function () {
             var time = 0;
-            that.drawGUI(0);
+            that.drawGUI('Time: 0');
             that.timer = setInterval(function () {
-                that.drawGUI(time);
+                that.drawGUI('Time: ' + time);
                 time += 1;
             }, 1000);
         };
@@ -378,22 +435,17 @@
             canvas.addEventListener("click", that.click, false);
 
             that.board.init();
-
-            that.board.addMines(that.numberOfMines);
-
             that.board.clear();
 
             tileSprite.onload = function () {
                 that.board.draw();
-                console.log('draw');
+                console.log('Game initialized');
             };
-
-            that.mainLoop();
         };
     }
 
 
-    game = new Game(10, 12, 10);
+    game = new Game(10, 12, 50);
     game.begin();
 
 }());
