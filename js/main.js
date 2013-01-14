@@ -287,6 +287,7 @@
 
         that.width = width;
         that.height = height;
+        that.guiHeight = 25;
         that.tileSize = 25;
         that.board = new Board(that.width, that.height, that.tileSize);
         that.mines = [];
@@ -339,14 +340,26 @@
             }
         }
 
+        /**
+        * Draw game information on canvas
+        */
+        that.drawGUI = function (time) {
+            ctx.fillStyle = "#333";
+            ctx.fillRect(0, canvas.height - that.guiHeight, canvas.width, that.guiHeight);
+            ctx.fillStyle = "#eee";
+            ctx.font = "15px 'Impact', 'Arial', sans-serif";
+
+            ctx.fillText('Time: ' + time, 7, canvas.height - 7);
+        };
 
         /**
         * Main game loop
         */
         that.mainLoop = function () {
             var time = 0;
+            that.drawGUI(0);
             that.timer = setInterval(function () {
-                document.getElementById('time').innerHTML = time;
+                that.drawGUI(time);
                 time += 1;
             }, 1000);
         };
@@ -359,7 +372,7 @@
 
             // Set up the canvas
             canvas.width = width * that.tileSize;
-            canvas.height = height * that.tileSize;
+            canvas.height = height * that.tileSize + that.guiHeight;
 
             // Add mouse support
             canvas.addEventListener("click", that.click, false);
