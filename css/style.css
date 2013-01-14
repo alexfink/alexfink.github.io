@@ -17,12 +17,18 @@ body {
 }
 
 canvas {
-    position: relative; /* firefox support */
+    /* firefox support */
+    position: relative;
+
+    /* centering */
+    display:inline-table;
+    padding-left: 0;
+
     margin-top: 20px;
     box-shadow: 0 0 44px rgba(0, 0, 0, 0.5);
 }
 
 .layout {
-    width: 400px;
+    text-align:center;
     margin: 0 auto;
 }

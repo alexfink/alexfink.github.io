@@ -333,18 +333,6 @@
         that.time = 0;
 
         /**
-        * Draw a dialog to ask if the player wants to play again
-        */
-        that.promptNewGame = function () {
-            ctx.fillStyle = '#333';
-            ctx.fillRect(25, 50, 201, 51);
-            ctx.fillStyle = '#eee';
-            ctx.fillText('Click to start new game', 70, 80);
-
-
-        };
-
-        /**
         * Called when all mines are found or when a mine is clicked
         */
         that.gameOver = function (won) {
@@ -484,7 +472,7 @@
 
     window.onload = function () {
         console.log('start');
-        game = new Game(15, 15, 20);
+        game = new Game(30, 15, 20);
         game.init();
     };
 
