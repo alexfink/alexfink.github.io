@@ -1,9 +1,16 @@
 body {
-    background: #ddd;
+    background: #555;
+    color: #eee;
+    font-family: 'Helvetica', 'Arial', 'sans-serif'
 }
 
-.canvas {
-    position: relative;
-    width: 500;
-    height: 500;
+canvas {
+    position: relative; /* firefox support */
+    margin-top: 20px;
+    box-shadow: 0 0 44px rgba(0, 0, 0, 0.5);
+}
+
+.layout {
+    width: 300px;
+    margin: 0 auto;
 }

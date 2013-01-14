@@ -11,6 +11,15 @@
         ctx = canvas.getContext('2d'),
         game;
 
+    // initialize game sprites
+    var backgroundSprite = new Image(),
+        mineSprite = new Image(),
+        tileSprite = new Image();
+
+    // load game sprites
+    backgroundSprite.src = 'img/background.jpg';
+    mineSprite.src = 'img/mine.jpg';
+    tileSprite.src = 'img/tile.jpg';
 
     /**
     * Tile object
@@ -31,30 +40,29 @@
         * Draw the tile to the canvas
         */
         that.draw = function () {
+            var x = that.x,
+                y = that.y;
+
             // Tile background
             if (that.isHidden) {
-                ctx.fillStyle = "#ddd";
+                ctx.drawImage(tileSprite, x, y);
             } else {
-                ctx.fillStyle = "#555";
+                ctx.drawImage(backgroundSprite, x, y);
             }
-            ctx.fillRect(that.x + 1, that.y + 1,
-                         that.size - 2, that.size - 2);
 
             // If tile uncovered
             if (!that.isHidden) {
                 // Print number of adjacent mines
                 if (that.numberOfAdjacentMines !== 0) {
-                    ctx.fillStyle = "#fff";
-                    ctx.font = "15px Arial";
+                    ctx.fillStyle = "#333";
+                    ctx.font = "15px 'Impact', 'Arial', sans-serif";
                     ctx.fillText(that.numberOfAdjacentMines,
-                                 that.x + 6, that.y + that.size - 5);
+                                 x + 9, y + that.size - 5);
                 }
 
                 // Uncovered mine
                 if (that.isMine) {
-                    ctx.fillStyle = "#f00";
-                    ctx.fillRect(that.x + 2, that.y + 2,
-                                 that.size - 3, that.size - 3);
+                    ctx.drawImage(mineSprite, x, y);
                 }
             }
         };
@@ -79,7 +87,7 @@
             // resetting canvas width causes it to reinitialize
             canvas.width = canvas.width;
 
-            ctx.fillStyle = "#002b36";
+            ctx.fillStyle = "#333";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
         };
 
@@ -274,12 +282,12 @@
     /**
     * Main game object
     */
-    function Game(width, height, tileSize, numberOfMines) {
+    function Game(width, height, numberOfMines) {
         var that = this;
 
         that.width = width;
         that.height = height;
-        that.tileSize = tileSize;
+        that.tileSize = 25;
         that.board = new Board(that.width, that.height, that.tileSize);
         that.mines = [];
         that.numberOfMines = numberOfMines;
@@ -344,14 +352,14 @@
         };
 
         /**
-        * Begin game
+        * Game initialization
         */
         that.begin = function () {
             var i, j;
 
             // Set up the canvas
-            canvas.width = width * tileSize;
-            canvas.height = height * tileSize;
+            canvas.width = width * that.tileSize;
+            canvas.height = height * that.tileSize;
 
             // Add mouse support
             canvas.addEventListener("click", that.click, false);
@@ -361,14 +369,18 @@
             that.board.addMines(that.numberOfMines);
 
             that.board.clear();
-            that.board.draw();
+
+            tileSprite.onload = function () {
+                that.board.draw();
+                console.log('draw');
+            };
 
             that.mainLoop();
         };
     }
 
 
-    game = new Game(10, 12, 25, 20);
+    game = new Game(10, 12, 10);
     game.begin();
 
 }());
