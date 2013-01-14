@@ -13,11 +13,13 @@
         // initialize game sprites
         backgroundSprite = new Image(),
         mineSprite = new Image(),
+        flagSprite = new Image(),
         tileSprite = new Image();
 
     // load game sprites
     backgroundSprite.src = 'img/background.jpg';
     mineSprite.src = 'img/mine.jpg';
+    flagSprite.src = 'img/flag.jpg';
     tileSprite.src = 'img/tile.jpg';
 
     /**
@@ -31,6 +33,7 @@
         that.y = y * that.size;
         that.isHidden = true;
         that.isMine = false;
+        that.isFlagged = false;
         that.numberOfAdjacentMines = 0;
         that.wasSearched = false;
 
@@ -42,10 +45,15 @@
             var x = that.x,
                 y = that.y;
 
-            // Tile background
             if (that.isHidden) {
-                ctx.drawImage(tileSprite, x, y);
+                // Hidden tile
+                if (that.isFlagged) {
+                    ctx.drawImage(flagSprite, x, y);
+                } else {
+                    ctx.drawImage(tileSprite, x, y);
+                }
             } else {
+                // Background
                 ctx.drawImage(backgroundSprite, x, y);
             }
 
@@ -354,17 +362,29 @@
             that.board.revealAll();
 
             // on click, start new game
-            canvas.removeEventListener("click", that.click, false);
-            canvas.addEventListener("click", that.init, false);
+            canvas.removeEventListener("mousedown", that.click, false);
+            canvas.addEventListener("mousedown", that.init, false);
         };
 
         /**
         * Click handler
+        * See http://www.quirksmode.org/js/events_properties.html
         */
         that.click = function (e) {
             var mouseX, mouseY,
-                clickedTile;
+                clickedTile,
+                rightClick;
 
+            if (!e) var e = window.event;
+
+            // determine if right click
+            if (e.which) {
+                rightClick = (e.which == 3);
+            } else if (e.button) {
+                rightClick = (e.button == 2);
+            }
+
+            // determine mouse position
             if (e.offsetX) {
                 mouseX = e.offsetX;
                 mouseY = e.offsetY;
@@ -377,26 +397,32 @@
             mouseX = Math.floor(mouseX / that.tileSize);
             mouseY = Math.floor(mouseY / that.tileSize);
 
-            // on first click, start timer and initialize
-            // the mines for the player not to click on a mine
-            if (that.isFirstClick) {
-                that.board.addMines(that.numberOfMines, mouseX, mouseY);
-                that.startTimer();
-                that.isFirstClick = false;
-            }
-
             // if we click on the board
             if (mouseY < that.board.tiles[0].length) {
                 clickedTile = that.board.tiles[mouseX][mouseY];
-                if (clickedTile.isMine) {
-                    // game lost
-                    that.gameOver(false);
-                } else {
-                    that.board.reveal(mouseX, mouseY);
 
-                    if (that.board.numberOfHiddenTiles === that.numberOfMines) {
-                        // game won
-                        that.gameOver(true);
+                if (rightClick) {
+                    clickedTile.isFlagged = !clickedTile.isFlagged;
+                    clickedTile.draw();
+                } else if (!clickedTile.isFlagged) {
+                    // on first click, start timer and initialize
+                    // the mines for the player not to click on a mine
+                    if (that.isFirstClick) {
+                        that.board.addMines(that.numberOfMines, mouseX, mouseY);
+                        that.startTimer();
+                        that.isFirstClick = false;
+                    }
+
+                    if (clickedTile.isMine) {
+                        // game lost
+                        that.gameOver(false);
+                    } else {
+                        that.board.reveal(mouseX, mouseY);
+
+                        if (that.board.numberOfHiddenTiles === that.numberOfMines) {
+                            // game won
+                            that.gameOver(true);
+                        }
                     }
                 }
             }
@@ -437,8 +463,8 @@
             canvas.height = height * that.tileSize + that.guiHeight;
 
             // Add mouse support
-            canvas.removeEventListener("click", that.init, false);
-            canvas.addEventListener("click", that.click, false);
+            canvas.removeEventListener("mousedown", that.init, false);
+            canvas.addEventListener("mousedown", that.click, false);
             that.isFirstClick = true;
 
             // initialize time
