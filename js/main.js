@@ -241,7 +241,6 @@
                 i, j,
                 width = that.tiles.length,
                 height = that.tiles[0].length,
-                count = 0,
                 currentTile = that.tiles[x][y],
                 tilesToClear = [];
 
@@ -252,17 +251,17 @@
                     for (j = -1; j <= 1; j += 1) {
                         // inside canvas ?
                         if ((x + i >= 0) && (x + i < width)
-                            && (y + j >= 0) && (y + j < height)) {
+                                && (y + j >= 0) && (y + j < height)) {
                             // is not a mine ?
                             currentTile = that.tiles[x + i][y + j];
 
                             // add tiles to clear to array
                             // empty tile
                             if ((currentTile.numberOfAdjacentMines === 0)
-                                // not the clicked nor diagonal
-                                && (Math.abs(i + j) === 1)
-                                // not already searched
-                                && (!currentTile.wasSearched)) {
+                                    // not the clicked nor diagonal
+                                    && (Math.abs(i + j) === 1)
+                                    // not already searched
+                                    && (!currentTile.wasSearched)) {
                                 tilesToClear.push([x + i, y + j]);
                             }
 
@@ -285,7 +284,6 @@
         */
         that.recursiveReveal = function (tilesToClear) {
             var arr = [],
-                idx = 0,
                 first,
                 returned = [];
             if (tilesToClear.length === 0) {
@@ -314,7 +312,6 @@
 
 
 
-
     /**
     * Main game object
     */
@@ -331,6 +328,7 @@
         that.isFirstClick = true;
         that.timer = {};
         that.time = 0;
+
 
         /**
         * Called when all mines are found or when a mine is clicked
@@ -363,13 +361,11 @@
                 clickedTile,
                 rightClick;
 
-            if (!e) var e = window.event;
-
             // determine if right click
             if (e.which) {
-                rightClick = (e.which == 3);
+                rightClick = (e.which === 3);
             } else if (e.button) {
-                rightClick = (e.button == 2);
+                rightClick = (e.button === 2);
             }
 
             // determine mouse position
@@ -407,7 +403,8 @@
                     } else {
                         that.board.reveal(mouseX, mouseY);
 
-                        if (that.board.numberOfHiddenTiles === that.numberOfMines) {
+                        if (that.board.numberOfHiddenTiles
+                                === that.numberOfMines) {
                             // game won
                             that.gameOver(true);
                         }
@@ -444,8 +441,6 @@
         * Game initialization
         */
         that.init = function () {
-            var i, j;
-
             // Set up the canvas
             canvas.width = width * that.tileSize;
             canvas.height = height * that.tileSize + that.guiHeight;
@@ -472,7 +467,7 @@
 
     window.onload = function () {
         console.log('start');
-        game = new Game(30, 15, 20);
+        game = new Game(15, 15, 25);
         game.init();
     };
 
