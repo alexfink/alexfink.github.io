@@ -1,0 +1,241 @@
+var canvas = document.getElementById("canvas")
+var ctx = canvas.getContext("2d")
+
+# initialize game sprites
+var backgroundSprite = new Image()
+var mineSprite = new Image()
+var flagSprite = new Image()
+var tileSprite = new Image()
+
+# load game sprites
+backgroundSprite.src = "img/background.jpg"
+mineSprite.src = "img/mine.jpg"
+flagSprite.src = "img/flag.jpg"
+tileSprite.src = "img/tile.jpg"
+
+
+
+# Tile class
+class Tile:
+    def Tile(size, x, y):
+        self.size = size
+        self.x = x * self.size
+        self.y = y * self.size
+        self.isHidden = true
+        self.isMine = false
+        self.isFlagged = false
+        self.numberOfAdjacentMines = 0
+        self.wasSearched = false
+    end
+
+    def draw():
+        var x = self.x
+        var y = self.y
+
+        if self.isHidden:
+            if self.isFlagged:
+                # unclicked flagged
+                ctx.drawImage(flagSprite, x, y)
+            else:
+                # unclicked
+                ctx.drawImage(tileSprite, x, y)
+            end
+        else:
+            # background
+            ctx.drawImage(backgroundSprite, x, y)
+        end
+
+        # if tile uncovered
+        if not self.isHidden:
+            if self.numberOfAdjacentMines != 0:
+                ctx.fillStyle = "#333"
+                ctx.font = "15px 'BebasNeueRegular', 'Arial', sans-serif"
+                ctx.fillText(self.numberOfAdjacentMines,
+                             x + 9, y + self.size - 5)
+            end
+
+            if self.isMine:
+                ctx.drawImage(mineSprite, x, y)
+            end
+        end
+    end
+end
+
+
+class Board:
+    def Board(width, height, tileSize):
+        self.width = width
+        self.height = height
+        self.tileSize = tileSize
+        self.tiles = []
+        # initialize with all tiles hidden
+        self.numberOfHiddenTiles = width * height
+    end
+
+    # initialize the board
+    def init():
+        self.numberOfHiddenTiles = width * height
+
+        # Initialize the board array
+        for i in [0 .. width-1]:
+            self.tiles[i] = []
+            for j in [0 .. height-1]:
+                self.tiles[i][j] = new Tile(tileSize, i, j)
+            end
+        end
+    end
+end
+
+
+# Main game class
+class Game:
+    def Game(width, height, numberOfMines):
+        self.width = width
+        self.height = height
+        self.numberOfMines = numberOfMines
+
+        self.guiHeight = 25
+        self.tileSize = 25
+
+        # self.board = new Board(self.width, self.height, self.tileSize)
+        self.mines = []
+
+        self.isFirstClick = true
+        self.timer = {}
+        self.time = 0
+    end
+
+    # Game initialisation
+    def init():
+        # set up canvas
+        canvas.width = self.width * self.tileSize
+        canvas.height = self.height * self.tileSize + self.guiHeight
+
+        # add mouse support
+        canvas.removeEventListener("mousedown", self.init, false)
+        canvas.addEventListener("mousedown", self.click, false)
+        self.isFirstClick = true
+
+        # initialize time
+        self.time = 0
+
+        self.board.init()
+
+        self.board.draw()
+        self.drawGUI("Game started, waiting for click...")
+
+        tileSprite.onload = def ():
+            self.board.draw()
+        end
+    end
+
+    # Timer
+    def startTimer():
+        self.drawGUI("Time: 0")
+
+        def onTick():
+            self.drawGUI("Time: " + self.time)
+            self.time += 1
+        end
+        self.timer = setInterval(onTick, 1000)
+    end
+
+    # Draw game information on canvas
+    def drawGUI(text):
+        ctx.fillStyle = "#333"
+        ctx.fillRect(0, canvas.height - self.guiHeight,
+                     canvas.width, self.guiHeight)
+        ctx.fillStyle = "#eee"
+        ctx.font = "15px 'BebasNeueRegular', 'Arial', sans-serif"
+
+        ctx.fillText(text, 7, canvas.height - 7)
+    end
+
+    # Click handler
+    # See http:#www.quirksmode.org/js/events_properties.html
+    def click(e):
+        var mouseX = 0
+        var mouseY = 0
+        var clickedTile = 0
+        var rightClick = 0
+
+        # determine if right click
+        if e.which:
+            rightClick = (e.which == 3)
+        else if e.button:
+            rightClick = (e.button == 2)
+        end
+
+        # determine mouse position
+        if e.offsetX:
+            mouseX = e.offsetX
+            mouseY = e.offsetY
+        else if e.layerX:
+            mouseX = e.layerX
+            mouseY = e.layerY
+        end
+
+        # normalize by tile size to get the tile coordinates
+        mouseX = Math.floor(mouseX / self.tileSize)
+        mouseY = Math.floor(mouseY / self.tileSize)
+
+        # if we click on the board
+        if mouseY < self.board.tiles[0].length:
+            clickedTile = self.board.tiles[mouseX][mouseY]
+
+            if rightClick:
+                clickedTile.isFlagged = not clickedTile.isFlagged
+                clickedTile.draw()
+            else if not clickedTile.isFlagged:
+                # on first click, start timer and initialize
+                # the mines for the player not to click on a mine
+                if self.isFirstClick:
+                    self.board.addMines(self.numberOfMines, mouseX, mouseY)
+                    self.startTimer()
+                    self.isFirstClick = false
+                end
+
+                if clickedTile.isMine:
+                    # game lost
+                    self.gameOver(false)
+                else:
+                    self.board.reveal(mouseX, mouseY)
+
+                    if self.board.numberOfHiddenTiles == self.numberOfMines:
+                        # game won
+                        self.gameOver(true)
+                    end
+                end
+            end
+        end
+    end
+
+    # Called when all mines are found or when a mine is clicked
+    def gameOver(won):
+        # stop timer
+        clearInterval(self.timer)
+
+        if won:
+            self.drawGUI("Congratulations! Score: " + self.time + "s. Click to play again")
+        else:
+            self.drawGUI("Game over! Click to play again")
+        end
+
+        # reveal the mines
+        self.board.revealAll()
+
+        # on click, start new game
+        canvas.removeEventListener("mousedown", self.click, false)
+        canvas.addEventListener("mousedown", self.init, false)
+    end
+end
+
+
+window.onload = def ():
+    console.log("start")
+    var game = new Game(15, 15, 25)
+    game.init()
+
+    var tile = new Tile(20, 50, 50)
+    tile.draw()
+end
