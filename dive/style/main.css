@@ -312,6 +312,12 @@ hr {
   -moz-transition: 100ms ease-in-out;
   -webkit-transition-property: top, left;
   -moz-transition-property: top, left; }
+  .tile.tile-small-4 {
+    font-size: 44px !important; }
+  .tile.tile-small-5 {
+    font-size: 35px !important; }
+  .tile.tile-small-6 {
+    font-size: 25px !important; }
   .tile.tile-1        { background: #000; }
   .tile.tile-2        { background: #400; }
   .tile.tile-4        { background: #800; }
