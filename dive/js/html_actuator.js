@@ -47,7 +47,7 @@ HTMLActuator.prototype.addTile = function (tile) {
   positionClass = this.positionClass(position);
 
   // We can't use classlist because it somehow glitches when replacing classes
-  var classes = ["tile", "tile-" + tile.value, positionClass];
+  var classes = ["tile", "tile-" + tile.displayvalue, positionClass];
   this.applyClasses(element, classes);
 
   element.textContent = tile.value;
