@@ -9,7 +9,7 @@ function Tile(position, value) {
   this.x                = position.x;
   this.y                = position.y;
   this.value            = value || 2;
-  this.displayvalue     = gcd(this.value, 63504000);
+  this.stylevalue       = gcd(this.value, 63504000);
 
   this.previousPosition = null;
   this.mergedFrom       = null; // Tracks tiles that merged together
