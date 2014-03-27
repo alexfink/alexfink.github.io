@@ -44,6 +44,13 @@ HTMLActuator.prototype.removeFirstChild = function (container) {
   container.removeChild(container.firstChild);
 };
 
+// yes, global function, naughty.  what should I have done?
+gcd = function(a, b) {
+  if (b === 0)
+    return a;
+  return self.gcd(b, a % b);
+};
+
 HTMLActuator.prototype.addTile = function (tile) {
   var self = this;
 
@@ -52,7 +59,7 @@ HTMLActuator.prototype.addTile = function (tile) {
   positionClass = this.positionClass(position);
 
   // We can't use classlist because it somehow glitches when replacing classes
-  var classes = ["tile", "tile-" + tile.stylevalue, positionClass];
+  var classes = ["tile", "tile-" + gcd(tile.value, 1296000)];
 
   var contentLength = String(tile.value).length;
   if (contentLength > 3) {
@@ -62,9 +69,8 @@ HTMLActuator.prototype.addTile = function (tile) {
     classes.push("tile-small-" + contentLength);
   }
 
+  classes.push(positionClass);
   this.applyClasses(element, classes);
-
-  element.textContent = tile.value;
 
   if (tile.previousPosition) {
     // Make sure that the tile gets rendered in the previous position first
@@ -87,6 +93,20 @@ HTMLActuator.prototype.addTile = function (tile) {
 
   // Put the tile on the board
   this.tileContainer.appendChild(element);
+
+  var tileNumber = document.createElement("div");
+  tileNumber.setAttribute("class", "tilenumber");
+  tileNumber.textContent = tile.value;
+  element.appendChild(tileNumber);
+
+  if (tile.value % 7 == 0) {
+    var tileOverlay = document.createElement("div");
+    if (tile.value % 49 == 0)
+      tileOverlay.setAttribute("class", "tileoverlay tileoverlay-49");
+    else
+      tileOverlay.setAttribute("class", "tileoverlay tileoverlay-7");
+    element.appendChild(tileOverlay);
+  }
 };
 
 HTMLActuator.prototype.applyClasses = function (element, classes) {
