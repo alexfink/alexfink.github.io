@@ -129,7 +129,7 @@ GameManager.prototype.move = function (direction) {
           tile.updatePosition(positions.next);
 
           // Update the score
-          self.score += merged.value;
+          self.score += Math.min(next.value, tile.value);
 
         } else {
           self.moveTile(tile, positions.farthest);
