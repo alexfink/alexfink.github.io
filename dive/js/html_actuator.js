@@ -61,14 +61,6 @@ HTMLActuator.prototype.addTile = function (tile) {
   // We can't use classlist because it somehow glitches when replacing classes
   var classes = ["tile", "tile-" + gcd(tile.value, 1296000)];
 
-  var contentLength = String(tile.value).length;
-  if (contentLength > 3) {
-    if (contentLength > 6) {
-      contentLength = 6;
-    }
-    classes.push("tile-small-" + contentLength);
-  }
-
   classes.push(positionClass);
   this.applyClasses(element, classes);
 
@@ -95,7 +87,15 @@ HTMLActuator.prototype.addTile = function (tile) {
   this.tileContainer.appendChild(element);
 
   var tileNumber = document.createElement("div");
-  tileNumber.setAttribute("class", "tilenumber");
+  var tileNumberClasses = ["tilenumber"];
+  var contentLength = String(tile.value).length;
+  if (contentLength > 3) {
+    if (contentLength > 6) {
+      contentLength = 6;
+    }
+    tileNumberClasses.push("tile-small-" + contentLength);
+  }
+  this.applyClasses(tileNumber, tileNumberClasses);
   tileNumber.textContent = tile.value;
   element.appendChild(tileNumber);
 

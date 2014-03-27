@@ -342,13 +342,13 @@ hr {
     -1px 1px 0 #000,
     1px 1px 0 #000; 
   z-index: 11;
-  .tile.tile-small-4 {
-    font-size: 44px !important; }
-  .tile.tile-small-5 {
-    font-size: 35px !important; }
-  .tile.tile-small-6 {
-    font-size: 25px !important; }
 }
+.tilenumber.tile-small-4 {
+  font-size: 44px !important; }
+.tilenumber.tile-small-5 {
+  font-size: 35px !important; }
+.tilenumber.tile-small-6 {
+  font-size: 25px !important; }
 
 .tile {
   border-radius: 3px;
@@ -845,7 +845,14 @@ hr {
   .tilenumber {
     width: 57.5px;
     height: 57.5px;
-    font-size: 35px; }
+    font-size: 35px; 
+   }
+  .tilenumber.tile-small-4 {
+    font-size: 28px !important; }
+  .tilenumber.tile-small-5 {
+    font-size: 21px !important; }
+  .tilenumber.tile-small-6 {
+    font-size: 14px !important; }
 
   .game-message p {
     font-size: 30px !important;
