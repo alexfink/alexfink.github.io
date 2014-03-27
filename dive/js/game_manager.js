@@ -146,8 +146,13 @@ GameManager.prototype.move = function (direction) {
   });
 
   if (moved) {
-    if (self.gameMode == 1 && newPrimes.length)
-      alert(newPrimes);
+    if (self.gameMode == 1 && newPrimes.length) {
+      var list = String(newPrimes.pop());
+      if (newPrimes.length) {
+        list = newPrimes.join(", ") + " and " + list;
+      }
+      self.actuator.announce(list + " unlocked!");
+    }
 
     this.addRandomTile();
 

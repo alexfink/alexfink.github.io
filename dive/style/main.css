@@ -170,6 +170,36 @@ hr {
     -moz-animation: fade-in 800ms ease 1200ms;
     -webkit-animation-fill-mode: both;
     -moz-animation-fill-mode: both; }
+    .game-container .announcer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      -webkit-transform: translateZ(300px);
+      -moz-transform: translateZ(300px);
+      transform: translateZ(300px); }
+      .game-container .announcer .announcement {
+        position: absolute;
+        color: rgba(59, 55, 50, 0.9);
+        font-size: 48px;
+        font-weight: bold;
+        text-align: center;
+        line-height: 1.0em;
+        height: 90px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        margin: auto;
+        -webkit-animation: fade-in-out 600ms ease-in;
+        -moz-animation: fade-in-out 600ms ease-in;
+        animation: fade-in-out 600ms ease-in;
+        -webkit-animation-fill-mode: both;
+        -moz-animation-fill-mode: both;
+        animation-fill-mode: both; }
     .game-container .game-message p {
       font-size: 60px;
       font-weight: bold;
@@ -936,6 +966,36 @@ hr {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box; }
+    .game-container .announcer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      -webkit-transform: translateZ(300px);
+      -moz-transform: translateZ(300px);
+      transform: translateZ(300px); }
+      .game-container .announcer .announcement {
+        position: absolute;
+        color: rgba(59, 55, 50, 0.9);
+        font-size: 48px;
+        font-weight: bold;
+        text-align: center;
+        line-height: 1.0em;
+        height: 90px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        margin: auto;
+        -webkit-animation: fade-in-out 600ms ease-in;
+        -moz-animation: fade-in-out 600ms ease-in;
+        animation: fade-in-out 600ms ease-in;
+        -webkit-animation-fill-mode: both;
+        -moz-animation-fill-mode: both;
+        animation-fill-mode: both; }
     .game-container .game-message {
       display: none;
       position: absolute;

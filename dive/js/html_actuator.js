@@ -3,6 +3,7 @@ function HTMLActuator() {
   this.scoreContainer   = document.querySelector(".score-container");
   this.bestContainer    = document.querySelector(".best-container");
   this.messageContainer = document.querySelector(".game-message");
+  this.announcer        = document.querySelector(".announcer");
 
   this.score = 0;
 }
@@ -37,6 +38,10 @@ HTMLActuator.prototype.clearContainer = function (container) {
   while (container.firstChild) {
     container.removeChild(container.firstChild);
   }
+};
+
+HTMLActuator.prototype.removeFirstChild = function (container) {
+  container.removeChild(container.firstChild);
 };
 
 HTMLActuator.prototype.addTile = function (tile) {
@@ -118,10 +123,19 @@ HTMLActuator.prototype.updateBestScore = function (bestScore) {
   this.bestContainer.textContent = bestScore;
 };
 
+HTMLActuator.prototype.announce = function (message) {
+  var announce = document.createElement("p");
+  announce.classList.add("announcement");
+  announce.textContent = message;
+  this.announcer.appendChild(announce);
+  setTimeout(this.removeFirstChild.bind(this,this.announcer),2500);
+};
+
 HTMLActuator.prototype.message = function (won) {
   var type    = won ? "game-won" : "game-over";
   var message = won ? "You win!" : "Game over!";
 
+  this.clearContainer(this.announcer);
   this.messageContainer.classList.add(type);
   this.messageContainer.getElementsByTagName("p")[0].textContent = message;
 };
