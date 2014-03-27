@@ -23,10 +23,20 @@
       </div>
     </div>
     <p class="game-intro">Dive is a 2048-like blending additive and multiplicative number theory.</p>
-    <p class="game-intro">Seeds are 2, 3, 5 and 7 with equal probability.  You can join two tiles if one of them can be divided by the other.  The merged tile that results will contain the sum.</p>
-<!--    <div><h4>News:</h4>
-      <p>nothing yet</p>
-    </div>-->
+    <p class="game-intro">You can join two tiles if one of them can be divided by the other.  The merged tile that results will contain the sum.</p>
+    <form method="post" name="gameModeForm" id="gameModeForm">
+      <p class="game-intro">Seeds are: 
+        <select id="gameModeSelect" name="gameModeSelect" onchange="changeGameMode()">
+          <option value="0" selected="selected">
+            2, 3, 5 and 7
+          </option>
+          <option value="1">
+<!--            any prime factor of a tile created so far-->
+            2
+          </option>
+        </select>
+      </p>
+    </form>
 
     <div class="game-container">
       <div class="game-message">

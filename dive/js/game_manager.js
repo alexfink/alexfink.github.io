@@ -22,6 +22,11 @@ GameManager.prototype.restart = function () {
 GameManager.prototype.setup = function () {
   this.grid         = new Grid(this.size);
 
+  this.gameMode     = document.gameModeForm.gameModeSelect.selectedIndex;
+  this.tileTypes = [2,3,5,7];
+  if (this.gameMode == 1)
+    this.tileTypes = [2];
+
   this.score        = 0;
   this.over         = false;
   this.won          = false;
@@ -43,16 +48,7 @@ GameManager.prototype.addStartTiles = function () {
 // Adds a tile in a random position
 GameManager.prototype.addRandomTile = function () {
   if (this.grid.cellsAvailable()) {
-    var tmp = Math.random();
-    var value;
-    if (tmp < 0.25)
-      value = 2;
-    else if (tmp < 0.5)
-      value = 3;
-    else if (tmp < 0.75)
-      value = 5;
-    else
-      value = 7;
+    var value = this.tileTypes[Math.floor(Math.random() * this.tileTypes.length)];
     var tile = new Tile(this.grid.randomAvailableCell(), value);
 
     this.grid.insertTile(tile);
