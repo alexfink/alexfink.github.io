@@ -99,6 +99,7 @@ GameManager.prototype.move = function (direction) {
   var vector     = this.getVector(direction);
   var traversals = this.buildTraversals(vector);
   var moved      = false;
+  var newPrimes  = [];
 
   // Save the current tile positions and remove merger information
   this.prepareTiles();
@@ -127,7 +128,13 @@ GameManager.prototype.move = function (direction) {
           // Update the score
           self.score += Math.min(next.value, tile.value);
 
-        } else {
+          // Unlock new primes, if in that mode
+          if (self.gameMode == 1) {
+            var primes = self.extractNewPrimes(merged.value);
+            self.tileTypes = self.tileTypes.concat(primes);
+            newPrimes = newPrimes.concat(primes);
+          }
+        } else { // if (tile)
           self.moveTile(tile, positions.farthest);
         }
 
@@ -139,6 +146,9 @@ GameManager.prototype.move = function (direction) {
   });
 
   if (moved) {
+    if (self.gameMode == 1 && newPrimes.length)
+      alert(newPrimes);
+
     this.addRandomTile();
 
     if (!this.movesAvailable()) {
@@ -154,6 +164,16 @@ GameManager.prototype.div = function (next, cur) {
     return next + cur
 };
 
+GameManager.prototype.extractNewPrimes = function (n) {
+  this.tileTypes.forEach(function (p) {
+      while ((n % p) == 0)
+        n /= p;
+    } 
+  );
+  if (n > 1)
+    return [n];
+  return [];
+};
 
 // Get the vector representing the chosen direction
 GameManager.prototype.getVector = function (direction) {
