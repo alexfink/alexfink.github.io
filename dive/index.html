@@ -31,7 +31,7 @@
             2, 3, 5 and 7
           </option>
           <option value="1">
-            any prime factor of a tile created so far
+            any prime* factor of a tile created so far
           </option>
         </select>
       </p>
@@ -82,6 +82,9 @@
     <p class="game-explanation">
       <strong class="important">How to play:</strong> Use your <strong>arrow keys</strong> or <strong>swipe</strong> to move the tiles (WASD and HJKL work too).  When two tiles touch, one of which divides the other, they <strong>merge into one, adding their values!</strong>
     </p>
+<p>
+* In the second seed mode, when you make a new tile N, the game divides N by all current seeds, and the result is "unlocked" as a new seed if it is not 1.  These new seeds aren't actually always prime (can you get a composite one?)
+</p>
     <hr>
     <p>
 The basic lore of 2048 variants, of which there are many (three cheers to <a href="https://github.com">github</a>!), is well known by now: the original <strong>2048</strong> was created by <a href="http://gabrielecirulli.com" target="_blank">Gabriele Cirulli</a>, based on <a href="https://itunes.apple.com/us/app/1024!/id823499224" target="_blank">1024 by Veewo Studio</a> which in turn was conceptually similar to <a href="http://asherv.com/threes/" target="_blank">Threes by Asher Vollmer</a>.
