@@ -60,6 +60,7 @@ HTMLActuator.prototype.addTile = function (tile) {
 
   // We can't use classlist because it somehow glitches when replacing classes
   var classes = ["tile", "tile-" + gcd(tile.value, 1296000)];
+  var animatedClasses = [];
 
   classes.push(positionClass);
   this.applyClasses(element, classes);
@@ -72,6 +73,7 @@ HTMLActuator.prototype.addTile = function (tile) {
     });
   } else if (tile.mergedFrom) {
     classes.push("tile-merged");
+    animatedClasses.push("tile-merged");
     this.applyClasses(element, classes);
 
     // Render the tiles that merged
@@ -80,14 +82,13 @@ HTMLActuator.prototype.addTile = function (tile) {
     });
   } else {
     classes.push("tile-new");
+    animatedClasses.push("tile-new");
     this.applyClasses(element, classes);
   }
 
-  // Put the tile on the board
-  this.tileContainer.appendChild(element);
-
   var tileNumber = document.createElement("div");
-  var tileNumberClasses = ["tilenumber"];
+  var tileNumberClasses = animatedClasses;
+  tileNumberClasses.push("tilenumber");
   var contentLength = String(tile.value).length;
   if (contentLength > 3) {
     if (contentLength > 6) {
@@ -101,12 +102,18 @@ HTMLActuator.prototype.addTile = function (tile) {
 
   if (tile.value % 7 == 0) {
     var tileOverlay = document.createElement("div");
+    var tileOverlayClasses = animatedClasses;
+    tileOverlayClasses.push("tileoverlay");
     if (tile.value % 49 == 0)
-      tileOverlay.setAttribute("class", "tileoverlay tileoverlay-49");
+      tileOverlayClasses.push("tileoverlay-49");
     else
-      tileOverlay.setAttribute("class", "tileoverlay tileoverlay-7");
+      tileOverlayClasses.push("tileoverlay-7");
+    this.applyClasses(tileOverlay, tileOverlayClasses);
     element.appendChild(tileOverlay);
   }
+
+  // Put the tile on the board
+  this.tileContainer.appendChild(element);
 };
 
 HTMLActuator.prototype.applyClasses = function (element, classes) {

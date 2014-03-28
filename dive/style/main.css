@@ -341,7 +341,7 @@ hr {
     1px -1px 0 #000,
     -1px 1px 0 #000,
     1px 1px 0 #000; 
-  z-index: 11;
+  z-index: 12;
 }
 .tilenumber.tile-small-4 {
   font-size: 44px !important; }
@@ -524,6 +524,7 @@ hr {
   position: absolute;
   left: 0;
   top: 0;
+  z-index: 11;
 }
 .tileoverlay.tileoverlay-7 { background: url('http://alexfink.github.io/dive/gradient1.png'); background-size: cover; }
 .tileoverlay.tileoverlay-49 { background: url('http://alexfink.github.io/dive/gradient2.png'); background-size: cover; }
