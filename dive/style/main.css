@@ -68,22 +68,21 @@ h1.title {
   border-radius: 3px;
   color: white;
   margin-top: 8px;
-  text-align: center; }
+  text-align: center; 
+  line-height: 47px; 
+  position: relative; }
 .score-container, .best-container {
-  position: relative;
-  display: inline-block; 
-  line-height: 47px; }
-  .score-container:after, .best-container:after {
+  display: inline-block; }
+  .score-container:after, .best-container:after, .currently-unlocked:after {
+    text-transform: uppercase;
+    font-size: 13px;
+    text-align: center;
+    color: #eee4da; 
     position: absolute;
     width: 100%;
     top: 10px;
     left: 0; 
     line-height: 13px; }
-  .score-container:after, .best-container:after, .currently-unlocked:before {
-    text-transform: uppercase;
-    font-size: 13px;
-    text-align: center;
-    color: #eee4da; }
   .score-container .score-addition, .best-container .score-addition {
     position: absolute;
     right: 30px;
@@ -104,9 +103,8 @@ h1.title {
 .best-container:after {
   content: "Best"; }
 
-.currently-unlocked:before {
+.currently-unlocked:after {
   content: "Seeds";
-  margin-right: 15px;
 }
 
 p {
