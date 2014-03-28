@@ -53,27 +53,35 @@ h1.title {
   float: right;
   text-align: right; }
 
-.score-container, .best-container {
-  position: relative;
-  display: inline-block;
+.currently-unlocked {
+  margin-top: 15px; 
+  display: block; 
+}
+.currently-unlocked.hidden { display: none; }
+
+.score-container, .best-container, .currently-unlocked {
   background: #bbada0;
   padding: 15px 25px;
   font-size: 25px;
   height: 25px;
-  line-height: 47px;
   font-weight: bold;
   border-radius: 3px;
   color: white;
   margin-top: 8px;
   text-align: center; }
+.score-container, .best-container {
+  position: relative;
+  display: inline-block; 
+  line-height: 47px; }
   .score-container:after, .best-container:after {
     position: absolute;
     width: 100%;
     top: 10px;
-    left: 0;
+    left: 0; 
+    line-height: 13px; }
+  .score-container:after, .best-container:after, .currently-unlocked:before {
     text-transform: uppercase;
     font-size: 13px;
-    line-height: 13px;
     text-align: center;
     color: #eee4da; }
   .score-container .score-addition, .best-container .score-addition {
@@ -95,6 +103,11 @@ h1.title {
 
 .best-container:after {
   content: "Best"; }
+
+.currently-unlocked:before {
+  content: "Current seed tiles";
+  margin-right: 15px;
+}
 
 p {
   margin-top: 0;
@@ -622,9 +635,6 @@ hr {
 .game-explanation {
   margin-top: 50px; }
 
-.currently-unlocked {
-  margin-top: 15px; }
-
 .sharing {
   margin-top: 20px;
   text-align: center; }
@@ -648,7 +658,7 @@ hr {
     width: 280px;
     margin: 0 auto; }
 
-  .score-container, .best-container {
+  .score-container, .best-container, .currently-unlocked {
     margin-top: 0;
     padding: 15px 10px;
     min-width: 40px; }

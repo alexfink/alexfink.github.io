@@ -174,9 +174,11 @@ HTMLActuator.prototype.clearMessage = function () {
 };
 
 HTMLActuator.prototype.updateCurrentlyUnlocked = function (list) {
-  this.currentlyUnlocked.textContent = "Current seed tiles: " + list.join(", ");
+  this.currentlyUnlocked.textContent = list.join(", ");
+  this.currentlyUnlocked.classList.remove("hidden");
 }
 
 HTMLActuator.prototype.clearCurrentlyUnlocked = function () {
   this.currentlyUnlocked.textContent = "";
+  this.currentlyUnlocked.classList.add("hidden");
 };
