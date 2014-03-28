@@ -87,7 +87,7 @@ HTMLActuator.prototype.addTile = function (tile) {
   }
 
   var tileNumber = document.createElement("div");
-  var tileNumberClasses = animatedClasses;
+  var tileNumberClasses = animatedClasses.slice(0);
   tileNumberClasses.push("tilenumber");
   var contentLength = String(tile.value).length;
   if (contentLength > 3) {
@@ -102,7 +102,7 @@ HTMLActuator.prototype.addTile = function (tile) {
 
   if (tile.value % 7 == 0) {
     var tileOverlay = document.createElement("div");
-    var tileOverlayClasses = animatedClasses;
+    var tileOverlayClasses = animatedClasses.slice(0);
     tileOverlayClasses.push("tileoverlay");
     if (tile.value % 49 == 0)
       tileOverlayClasses.push("tileoverlay-49");
