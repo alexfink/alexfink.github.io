@@ -23,7 +23,7 @@ GameManager.prototype.setup = function () {
   this.grid         = new Grid(this.size);
 
   var select = document.gameModeForm.gameModeSelect;
-  this.gameMode     = select.options[select.selectedIndex].value;
+  this.gameMode     = +(select.options[select.selectedIndex].value);
   this.tileTypes = [2,3,5,7];
   if (this.gameMode & 1) {
     this.tileTypes = [2];
@@ -157,7 +157,8 @@ GameManager.prototype.move = function (direction) {
       self.actuator.updateCurrentlyUnlocked(self.tileTypes);
     } // mode 1
     
-    if (self.gameMode & 3) {
+    if ((self.gameMode & 3) == 3) {
+      // Eliminate primes now absent.
       var eliminatedIndices = [];
       for (var i = 0; i < self.tileTypes.length; i++)
         eliminatedIndices.push(i);
