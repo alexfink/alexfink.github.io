@@ -24,8 +24,10 @@ GameManager.prototype.setup = function () {
 
   this.gameMode     = document.gameModeForm.gameModeSelect.selectedIndex;
   this.tileTypes = [2,3,5,7];
-  if (this.gameMode == 1)
+  if (this.gameMode == 1) {
     this.tileTypes = [2];
+    this.actuator.updateCurrentlyUnlocked(this.tileTypes);
+  }
 
   this.score        = 0;
   this.over         = false;
@@ -152,6 +154,7 @@ GameManager.prototype.move = function (direction) {
         list = newPrimes.join(", ") + " and " + list;
       }
       self.actuator.announce(list + " unlocked!");
+      self.actuator.updateCurrentlyUnlocked(self.tileTypes);
     }
 
     this.addRandomTile();

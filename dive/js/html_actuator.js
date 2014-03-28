@@ -4,6 +4,7 @@ function HTMLActuator() {
   this.bestContainer    = document.querySelector(".best-container");
   this.messageContainer = document.querySelector(".game-message");
   this.announcer        = document.querySelector(".announcer");
+  this.currentlyUnlocked= document.querySelector(".currently-unlocked");
 
   this.score = 0;
 }
@@ -32,6 +33,7 @@ HTMLActuator.prototype.actuate = function (grid, metadata) {
 
 HTMLActuator.prototype.restart = function () {
   this.clearMessage();
+  this.clearCurrentlyUnlocked();
 };
 
 HTMLActuator.prototype.clearContainer = function (container) {
@@ -169,4 +171,12 @@ HTMLActuator.prototype.message = function (won) {
 
 HTMLActuator.prototype.clearMessage = function () {
   this.messageContainer.classList.remove("game-won", "game-over");
+};
+
+HTMLActuator.prototype.updateCurrentlyUnlocked = function (list) {
+  this.currentlyUnlocked.textContent = "Unlocked primes: " + list.join(", ");
+}
+
+HTMLActuator.prototype.clearCurrentlyUnlocked = function () {
+  this.currentlyUnlocked.textContent = "";
 };
