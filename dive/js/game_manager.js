@@ -22,12 +22,13 @@ GameManager.prototype.restart = function () {
 GameManager.prototype.setup = function () {
   this.grid         = new Grid(this.size);
 
-  this.gameMode     = document.gameModeForm.gameModeSelect.selectedIndex;
+  var select = document.gameModeForm.gameModeSelect;
+  this.gameMode     = select.options[select.selectedIndex].value;
   this.tileTypes = [2,3,5,7];
-  if (this.gameMode == 1) {
+  if (this.gameMode & 1) {
     this.tileTypes = [2];
     this.actuator.updateCurrentlyUnlocked(this.tileTypes);
-  }
+  } 
 
   this.score        = 0;
   this.over         = false;
@@ -111,7 +112,6 @@ GameManager.prototype.move = function (direction) {
     traversals.y.forEach(function (y) {
       cell = { x: x, y: y };
       tile = self.grid.cellContent(cell);
-
       if (tile) {
         var positions = self.findFarthestPosition(cell, vector);
         var next      = self.grid.cellContent(positions.next);
@@ -131,7 +131,7 @@ GameManager.prototype.move = function (direction) {
           self.score += Math.min(next.value, tile.value);
 
           // Unlock new primes, if in that mode
-          if (self.gameMode == 1) {
+          if (self.gameMode & 1) {
             var primes = self.extractNewPrimes(merged.value);
             self.tileTypes = self.tileTypes.concat(primes);
             newPrimes = newPrimes.concat(primes);
@@ -148,14 +148,48 @@ GameManager.prototype.move = function (direction) {
   });
 
   if (moved) {
-    if (self.gameMode == 1 && newPrimes.length) {
+    if ((self.gameMode & 1) && newPrimes.length) {
       var list = String(newPrimes.pop());
       if (newPrimes.length) {
         list = newPrimes.join(", ") + " and " + list;
       }
       self.actuator.announce(list + " unlocked!");
       self.actuator.updateCurrentlyUnlocked(self.tileTypes);
-    }
+    } // mode 1
+    
+    if (self.gameMode & 3) {
+      var eliminatedIndices = [];
+      for (var i = 0; i < self.tileTypes.length; i++)
+        eliminatedIndices.push(i);
+
+      traversals.x.forEach(function (x) {
+        traversals.y.forEach(function (y) {
+          cell = { x: x, y: y };
+          tile = self.grid.cellContent(cell);
+          if (tile) {
+            for(var i = 0; i < self.tileTypes.length; i++) {
+              if (tile.value % self.tileTypes[i] == 0)
+                eliminatedIndices[i] = null;
+            }
+          }
+        });
+      });
+      
+      eliminatedIndices = eliminatedIndices.filter(function (x) {return x != null});
+      if (eliminatedIndices.length) {
+        var eliminatedPrimes = eliminatedIndices.map(function (x) {return self.tileTypes[x]});
+          var list = String(eliminatedPrimes.pop());
+          if (eliminatedPrimes.length) {
+            list = eliminatedPrimes.join(", ") + " and " + list;
+          }
+          self.actuator.announce(list + " eliminated!");
+          self.actuator.updateCurrentlyUnlocked(self.tileTypes);
+      }
+      
+      for(var i = eliminatedIndices.length - 1; i >= 0; i--)
+        self.tileTypes.splice(eliminatedIndices[i],1);
+      self.actuator.updateCurrentlyUnlocked(self.tileTypes);
+    } // mode 3
 
     this.addRandomTile();
 
@@ -164,7 +198,7 @@ GameManager.prototype.move = function (direction) {
     }
 
     this.actuate();
-  }
+  } // if (moved)
 };
 
 GameManager.prototype.div = function (next, cur) {
