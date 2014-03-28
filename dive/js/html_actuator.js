@@ -174,7 +174,7 @@ HTMLActuator.prototype.clearMessage = function () {
 };
 
 HTMLActuator.prototype.updateCurrentlyUnlocked = function (list) {
-  this.currentlyUnlocked.textContent = "Unlocked primes: " + list.join(", ");
+  this.currentlyUnlocked.textContent = "Unlocked tiles: " + list.join(", ");
 }
 
 HTMLActuator.prototype.clearCurrentlyUnlocked = function () {
