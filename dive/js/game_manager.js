@@ -149,6 +149,11 @@ GameManager.prototype.move = function (direction) {
 
   if (moved) {
     if ((self.gameMode & 1) && newPrimes.length) {
+      // in mode 1, score for unlocking
+      if ((self.gameMode & 3) == 1) {
+        self.score += newPrimes.reduce(function(x,y){return x+y});
+      }
+
       var list = String(newPrimes.pop());
       if (newPrimes.length) {
         list = newPrimes.join(", ") + " and " + list;
@@ -179,12 +184,14 @@ GameManager.prototype.move = function (direction) {
       eliminatedIndices = eliminatedIndices.filter(function (x) {return x != null});
       if (eliminatedIndices.length) {
         var eliminatedPrimes = eliminatedIndices.map(function (x) {return self.tileTypes[x]});
-          var list = String(eliminatedPrimes.pop());
-          if (eliminatedPrimes.length) {
-            list = eliminatedPrimes.join(", ") + " and " + list;
-          }
-          self.actuator.announce(list + " eliminated!");
-          self.actuator.updateCurrentlyUnlocked(self.tileTypes);
+        self.score += eliminatedPrimes.reduce(function(x,y){return x+y});
+
+        var list = String(eliminatedPrimes.pop());
+        if (eliminatedPrimes.length) {
+          list = eliminatedPrimes.join(", ") + " and " + list;
+        }
+        self.actuator.announce(list + " eliminated!");
+        self.actuator.updateCurrentlyUnlocked(self.tileTypes);
       }
       
       for(var i = eliminatedIndices.length - 1; i >= 0; i--)
