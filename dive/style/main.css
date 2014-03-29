@@ -183,27 +183,23 @@ hr {
     -moz-animation-fill-mode: both; }
     .game-container .announcer {
       position: absolute;
-      top: 0;
+      top: 218px;
       left: 0;
       z-index: 1000;
       width: 100%;
-      height: 100%;
+      height: 56.4%;
       pointer-events: none;
       -webkit-transform: translateZ(300px);
       -moz-transform: translateZ(300px);
       transform: translateZ(300px); }
       .game-container .announcer .announcement {
-        position: absolute;
+        position: relative;
         color: rgba(59, 55, 50, 0.9);
         font-size: 48px;
         font-weight: bold;
         text-align: center;
         line-height: 1.0em;
-        height: 90px;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
+        height: 64px;
         margin: auto;
         -webkit-animation: fade-in-out 600ms ease-in;
         -moz-animation: fade-in-out 600ms ease-in;
@@ -727,27 +723,23 @@ hr {
     box-sizing: border-box; }
     .game-container .announcer {
       position: absolute;
-      top: 0;
+      top: 122px;
       left: 0;
       z-index: 1000;
       width: 100%;
-      height: 100%;
+      height: 56.4%;
       pointer-events: none;
       -webkit-transform: translateZ(300px);
       -moz-transform: translateZ(300px);
       transform: translateZ(300px); }
       .game-container .announcer .announcement {
-        position: absolute;
+        position: relative;
         color: rgba(59, 55, 50, 0.9);
         font-size: 48px;
         font-weight: bold;
         text-align: center;
         line-height: 1.0em;
-        height: 90px;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
+        height: 64px;
         margin: auto;
         -webkit-animation: fade-in-out 600ms ease-in;
         -moz-animation: fade-in-out 600ms ease-in;
