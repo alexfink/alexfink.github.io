@@ -536,8 +536,54 @@ hr {
   top: 0;
   z-index: 11;
 }
-.tileoverlay.tileoverlay-7 { background: url('http://alexfink.github.io/dive/gradient1.png'); background-size: cover; }
-.tileoverlay.tileoverlay-49 { background: url('http://alexfink.github.io/dive/gradient2.png'); background-size: cover; }
+.tileoverlay.tileoverlay-7    { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/7.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-49   { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/49.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-11   { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/11.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-121  { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/121.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-13   { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/13.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-169  { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/169.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-17   { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/17.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-289  { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/289.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-19   { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/19.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-361  { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/361.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-23   { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/23.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-529  { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/529.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-29   { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/29.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-841  { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/841.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-31   { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/31.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-961  { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/961.png'); 
+  background-size: cover; }
 
 
 @-webkit-keyframes appear {

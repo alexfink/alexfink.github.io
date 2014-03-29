@@ -7,6 +7,8 @@ function HTMLActuator() {
   this.currentlyUnlocked= document.querySelector(".currently-unlocked");
 
   this.score = 0;
+  
+  this.overlayPrimes = [7, 11, 13, 17, 19, 23, 29, 31];
 }
 
 HTMLActuator.prototype.actuate = function (grid, metadata) {
@@ -102,17 +104,19 @@ HTMLActuator.prototype.addTile = function (tile) {
   tileNumber.textContent = tile.value;
   element.appendChild(tileNumber);
 
-  if (tile.value % 7 == 0) {
-    var tileOverlay = document.createElement("div");
-    var tileOverlayClasses = animatedClasses.slice(0);
-    tileOverlayClasses.push("tileoverlay");
-    if (tile.value % 49 == 0)
-      tileOverlayClasses.push("tileoverlay-49");
-    else
-      tileOverlayClasses.push("tileoverlay-7");
-    this.applyClasses(tileOverlay, tileOverlayClasses);
-    element.appendChild(tileOverlay);
-  }
+  this.overlayPrimes.forEach(function (p) {
+    if (tile.value % p == 0) {
+      var tileOverlay = document.createElement("div");
+      var tileOverlayClasses = animatedClasses.slice(0);
+      tileOverlayClasses.push("tileoverlay");
+      if (tile.value % (p*p) == 0)
+        tileOverlayClasses.push("tileoverlay-" + (p*p));
+      else
+        tileOverlayClasses.push("tileoverlay-" + p);
+      self.applyClasses(tileOverlay, tileOverlayClasses);
+      element.appendChild(tileOverlay);
+    }
+  });
 
   // Put the tile on the board
   this.tileContainer.appendChild(element);
