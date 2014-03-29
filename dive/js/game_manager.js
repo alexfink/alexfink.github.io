@@ -9,6 +9,7 @@ function GameManager(size, InputManager, Actuator, ScoreManager) {
   this.inputManager.on("restart", this.restart.bind(this));
 
   this.setup();
+  this.scoreManager = new ScoreManager;
 }
 
 // Restart the game
@@ -29,7 +30,6 @@ GameManager.prototype.setup = function () {
     this.actuator.updateCurrentlyUnlocked(this.tileTypes);
   } 
 
-  this.scoreManager = new ScoreManager;
   this.score        = 0;
   this.over         = false;
   this.won          = false;
