@@ -34,6 +34,9 @@ GameManager.prototype.setup = function () {
   this.over         = false;
   this.won          = false;
 
+  // Set game mode for best score
+  this.scoreManager.setGameMode(this.gameMode);
+
   // Add the initial tiles
   this.addStartTiles();
 
