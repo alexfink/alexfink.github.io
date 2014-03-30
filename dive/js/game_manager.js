@@ -110,6 +110,16 @@ GameManager.prototype.move = function (direction) {
   // Save the current tile positions and remove merger information
   this.prepareTiles();
 
+  var ominosityBound;
+  if (self.gameMode && 1) {
+    // The idea of this is that a seed is ominous roughly if it exceeds 
+    // the 2i-th prime, if there are i seeds so far.
+    // But add a little more, to be forgiving.
+    ominosityBound = self.tileTypes.length * 2;
+    ominosityBound *= Math.log(ominosityBound);
+    ominosityBound += 8;
+  }
+
   // Traverse the grid in the right direction and move tiles
   traversals.x.forEach(function (x) {
     traversals.y.forEach(function (y) {
@@ -157,11 +167,14 @@ GameManager.prototype.move = function (direction) {
         self.score += newPrimes.reduce(function(x,y){return x+y});
       }
 
+      var verb = " unlocked!";
+      if (newPrimes.filter(function(x){return x > ominosityBound}).length)
+        verb = " unleashed!";
       var list = String(newPrimes.pop());
       if (newPrimes.length) {
         list = newPrimes.join(", ") + " and " + list;
       }
-      self.actuator.announce(list + " unlocked!");
+      self.actuator.announce(list + verb);
       self.actuator.updateCurrentlyUnlocked(self.tileTypes);
     } // mode 1
     
@@ -189,11 +202,14 @@ GameManager.prototype.move = function (direction) {
         var eliminatedPrimes = eliminatedIndices.map(function (x) {return self.tileTypes[x]});
         self.score += eliminatedPrimes.reduce(function(x,y){return x+y});
 
+        var verb = " eliminated!"
+        if (eliminatedPrimes.filter(function(x){return x > ominosityBound}).length)
+          verb = " vanquished!";
         var list = String(eliminatedPrimes.pop());
         if (eliminatedPrimes.length) {
           list = eliminatedPrimes.join(", ") + " and " + list;
         }
-        self.actuator.announce(list + " eliminated!");
+        self.actuator.announce(list + verb);
         self.actuator.updateCurrentlyUnlocked(self.tileTypes);
       }
       
