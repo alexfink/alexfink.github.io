@@ -54,24 +54,26 @@ h1.title {
   text-align: right; }
 
 .currently-unlocked {
-  margin-top: 15px; 
   display: block; 
+  height: 42.5px;
+  line-height: 64.5px;
+  padding: 25px 0px 15px;
 }
 .currently-unlocked.hidden { display: none; }
 
 .score-container, .best-container, .currently-unlocked {
   background: #bbada0;
-  padding: 15px 25px;
   font-size: 25px;
-  height: 25px;
   font-weight: bold;
   border-radius: 3px;
   color: white;
   margin-top: 8px;
   text-align: center; 
-  line-height: 47px; 
   position: relative; }
 .score-container, .best-container {
+  padding: 15px 25px;
+  height: 25px;
+  line-height: 47px; 
   display: inline-block; }
   .score-container:after, .best-container:after, .currently-unlocked:after {
     text-transform: uppercase;
@@ -635,6 +637,26 @@ hr {
   background: url('http://alexfink.github.io/dive/tileoverlays/5041.png'); 
   background-size: cover; }
 
+.tile.minitile, .tile.minitile .tilenumber, .tile.minitile .tileoverlay {
+  width: 42.5px; 
+  height: 42.5px; 
+  display: inline-block; }
+.tile.minitile {  
+  position: relative; 
+  line-height: 52.5px;
+  margin: 3px; 
+}
+.tile.minitile .tilenumber {
+  font-size: 27.5px; }
+.tile.minitile .tilenumber.tile-small-3 {
+  font-size: 22px !important; }
+.tile.minitile .tilenumber.tile-small-4 {
+  font-size: 17.6px !important; }
+.tile.minitile .tilenumber.tile-small-5 {
+  font-size: 21px !important; }
+.tile.minitile .tilenumber.tile-small-6 {
+  font-size: 10px !important; }
+
 
 @-webkit-keyframes appear {
   0% {
@@ -754,8 +776,11 @@ hr {
 
   .score-container, .best-container, .currently-unlocked {
     margin-top: 0;
-    padding: 15px 10px;
     min-width: 40px; }
+  .score-container, .best-container {
+    padding: 15px 10px; }
+  .currently-unlocked {
+    padding: 25px 0px 15px; }
 
   .heading {
     margin-bottom: 10px; }
@@ -958,6 +983,13 @@ hr {
     font-size: 21px !important; }
   .tilenumber.tile-small-6 {
     font-size: 14px !important; }
+
+  .tile.minitile, .tile.minitile .tilenumber, .tile.minitile .tileoverlay {
+    width: 23px; 
+    height: 23px; }
+  .tile.minitile {  
+    line-height: 33px;
+  }
 
   .game-message p {
     font-size: 30px !important;

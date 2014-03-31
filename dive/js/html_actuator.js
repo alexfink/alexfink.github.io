@@ -55,7 +55,7 @@ gcd = function(a, b) {
   return self.gcd(b, a % b);
 };
 
-HTMLActuator.prototype.addTile = function (tile) {
+HTMLActuator.prototype.createTile = function (tile, animate) {
   var self = this;
 
   var element   = document.createElement("div");
@@ -85,8 +85,10 @@ HTMLActuator.prototype.addTile = function (tile) {
       self.addTile(merged);
     });
   } else {
-    classes.push("tile-new");
-    animatedClasses.push("tile-new");
+    if (animate) {
+      classes.push("tile-new");
+      animatedClasses.push("tile-new");
+    }
     this.applyClasses(element, classes);
   }
 
@@ -94,7 +96,7 @@ HTMLActuator.prototype.addTile = function (tile) {
   var tileNumberClasses = animatedClasses.slice(0);
   tileNumberClasses.push("tilenumber");
   var contentLength = String(tile.value).length;
-  if (contentLength > 3) {
+  if (contentLength > 2) {
     if (contentLength > 6) {
       contentLength = 6;
     }
@@ -118,6 +120,12 @@ HTMLActuator.prototype.addTile = function (tile) {
     }
   });
 
+  return element;
+}
+
+HTMLActuator.prototype.addTile = function (tile) {
+  var element = this.createTile(tile, true);
+
   // Put the tile on the board
   this.tileContainer.appendChild(element);
 };
@@ -131,6 +139,8 @@ HTMLActuator.prototype.normalizePosition = function (position) {
 };
 
 HTMLActuator.prototype.positionClass = function (position) {
+  if (position.x == null)
+    return;
   position = this.normalizePosition(position);
   return "tile-position-" + position.x + "-" + position.y;
 };
@@ -178,11 +188,23 @@ HTMLActuator.prototype.clearMessage = function () {
 };
 
 HTMLActuator.prototype.updateCurrentlyUnlocked = function (list) {
-  this.currentlyUnlocked.textContent = list.join(", ");
   this.currentlyUnlocked.classList.remove("hidden");
+
+  //this.currentlyUnlocked.textContent = list.join(", ");
+  this.clearContainer(this.currentlyUnlocked);
+
+  var self = this;
+  list.forEach(function (value) {
+    var tile = new Tile ({ x: null, y: null }, value);
+    var tileElement = self.createTile(tile, false);
+    tileElement.classList.add("minitile");
+    self.currentlyUnlocked.appendChild(tileElement);
+  });
 }
 
 HTMLActuator.prototype.clearCurrentlyUnlocked = function () {
-  this.currentlyUnlocked.textContent = "";
   this.currentlyUnlocked.classList.add("hidden");
+
+  //this.currentlyUnlocked.textContent = "";
+  this.clearContainer(this.currentlyUnlocked);
 };
