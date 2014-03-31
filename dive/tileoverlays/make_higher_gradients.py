@@ -42,9 +42,9 @@ def wavy(colour, direction, frequency, attenuation, has_sevens, supercolour, sup
       if band_position < 1/6.0 or band_position > 5/6.0:
         if (supercolour != None):
           if superband_position < 1/6.0 or superband_position > 5/6.0:
-            alpha_data.append(attenuation * 256)
-          else:
             alpha_data.append(2 * attenuation * 256)
+          else:
+            alpha_data.append(attenuation * 256)
         else:
           alpha_data.append(attenuation * 256)
       else:
