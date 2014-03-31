@@ -2,7 +2,9 @@ from PIL import Image
 import math
 
 primes = [11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71]
-levels = [[0, 4, 8, 10, 12, 13, 14, 15], [0, 6, 10, 13, 15], [0, 8, 12, 15]]
+# The levels of green used in the tile backgrounds are [0, 6, 10, 13, 15].  
+# But Vynce thought the result was too green-dominated, so I've toned the greens down here.
+levels = [[0, 4, 8, 10, 12, 13, 14, 15], [0, 4, 8, 12, 15], [0, 8, 12, 15]]
 image_size = 212
 
 def wavy(colour, direction, frequency, attenuation, has_sevens, supercolour, superfrequency, superattenuation):
