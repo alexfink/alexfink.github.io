@@ -95,6 +95,8 @@ for p in primes:
     supercolour, supersevens, superresidue = base_colour((residue+1)/2)
     if superresidue > 1:
       supersupercolour, supersupersevens, supersuperresidue = base_colour((superresidue+1)/2)
+      if supercolour == [127.5, 127.5, 127.5]:
+        supercolour = [0.0, 0.0, 0.0]
     else:
       supersupercolour = None
     if supersevens > 1:
