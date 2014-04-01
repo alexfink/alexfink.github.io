@@ -60,6 +60,9 @@ h1.title {
   padding: 25px 0px 15px;
 }
 .currently-unlocked.hidden { display: none; }
+.currently-unlocked.all-seeds-seen {
+  line-height: 30px;
+}
 
 .score-container, .best-container, .currently-unlocked {
   background: #bbada0;
@@ -107,7 +110,9 @@ h1.title {
 
 .currently-unlocked:after {
   content: "Seeds"; }
-.currently-unlocked.all-seeds-seen:after { content: "All seeds seen"; }
+.currently-unlocked.all-seeds-seen:after { 
+  content: "All seeds seen"; 
+}
 
 p {
   margin-top: 0;
