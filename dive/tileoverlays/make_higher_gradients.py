@@ -1,13 +1,15 @@
 from PIL import Image
 import math
 
-primes = [11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71]
+primes = [13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 
+  73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139]
 # The levels of green used in the tile backgrounds are [0, 6, 10, 13, 15].  
 # But Vynce thought the result was too green-dominated, so I've toned the greens down here.
 levels = [[0, 4, 8, 10, 12, 13, 14, 15], [0, 4, 8, 12, 15], [0, 8, 12, 15]]
 image_size = 212
 
-def wavy(colour, direction, frequency, attenuation, has_sevens, supercolour, superfrequency, superattenuation):
+# Yes, this function is teeming with bad code reuse.  Ah well.
+def wavy(colour, direction, frequency, attenuation, has_sevens, supercolour, superfrequency, superattenuation, supersupercolour):
   colour_data = []
   alpha_data = []
   
@@ -17,10 +19,16 @@ def wavy(colour, direction, frequency, attenuation, has_sevens, supercolour, sup
       cd, sd = math.cos(direction), math.sin(direction)
       rix, riy = cd*x + sd*y, -sd*x + cd*y
       if (has_sevens):
-        if (supercolour != None):
-          raise NotImplementedException, "I don't know how to draw sevens with larger primes"
-        shading = math.cos(14*riy)
+        if supercolour != None:
+          seven_frequency = superfrequency
+        else:
+          seven_frequency = 14.0
+        shading = math.cos(seven_frequency*riy)
         if (shading >= 0):
+          colour_approached = (255.0, 255.0, 255.0)
+          seven_band_position = (riy * seven_frequency) % 1
+          if (supercolour != None) and (seven_band_position < 1/6.0 or seven_band_position > 5/6.0):
+            colour_approached = supercolour
           colour_data.append((255.0-(255.0-colour[0])*(1-shading), 
                               255.0-(255.0-colour[1])*(1-shading), 
                               255.0-(255.0-colour[2])*(1-shading)))
@@ -32,7 +40,10 @@ def wavy(colour, direction, frequency, attenuation, has_sevens, supercolour, sup
         if (supercolour != None):
           superband_position = (riy * superfrequency) % 1
           if superband_position < 1/6.0 or superband_position > 5/6.0:
-            colour_data.append((supercolour[0], supercolour[1], supercolour[2]))
+            if (supersupercolour != None) and not (superband_position < 1/18.0 or superband_position > 17/18.0):
+              colour_data.append((supersupercolour[0], supersupercolour[1], supersupercolour[2]))
+            else:
+              colour_data.append((supercolour[0], supercolour[1], supercolour[2]))
           else:
             colour_data.append((colour[0], colour[1], colour[2]))
         else:
@@ -72,7 +83,7 @@ def base_colour(m):
     colour = map(lambda x : x*255.0/mmax, colour)
   return (colour, small_factor_counts[3], m)
 
-p_index = 0
+p_index = 1
 for p in primes:
   p_index += 1
   colour, sevens, residue = base_colour((p+1)/2)
@@ -80,8 +91,14 @@ for p in primes:
   attenuation = 3/2.0/math.sqrt(p)
   direction = math.pi*((math.sqrt(5)+1)/2*p_index + 1.0/4) # in which the bright stripes are
 
-  if residue != 1:
+  if residue > 1:
     supercolour, supersevens, superresidue = base_colour((residue+1)/2)
+    if superresidue > 1:
+      supersupercolour, supersupersevens, supersuperresidue = base_colour((superresidue+1)/2)
+    else:
+      supersupercolour = None
+    if supersevens > 1:
+      raise NotImplementedError, "I don't know what to do if there's a seven at the second step" % p
     if colour == [127.5, 127.5, 127.5]:
       colour = [0.0, 0.0, 0.0]
     superfrequency = math.sqrt(residue)*2/3.0
@@ -90,9 +107,12 @@ for p in primes:
     supercolour = None
     superfrequency = None
     superattenuation = None
+    supersupercolour = None
 
-  im = wavy(colour, direction, frequency, attenuation, sevens > 0, supercolour, superfrequency, superattenuation) 
+  im = wavy(colour, direction, frequency, attenuation, sevens > 0, supercolour, superfrequency, superattenuation, supersupercolour) 
+  print (".tileoverlay.tileoverlay-%d { \n  background: url('http://alexfink.github.io/dive/tileoverlays/%d.png'); \n  background-size: cover; }") % (p, p)
   im.save("%s.png" % p)
-  im = wavy(colour, direction, frequency, 2*attenuation, sevens > 0, supercolour, superfrequency, superattenuation) 
+  im = wavy(colour, direction, frequency, 2*attenuation, sevens > 0, supercolour, superfrequency, superattenuation, supersupercolour) 
+  print (".tileoverlay.tileoverlay-%d { \n  background: url('http://alexfink.github.io/dive/tileoverlays/%d.png'); \n  background-size: cover; }") % (p*p, p*p)
   im.save("%s.png" % (p*p))
 
