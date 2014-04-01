@@ -28,6 +28,7 @@ GameManager.prototype.setup = function () {
   if (this.gameMode & 1) {
     this.tileTypes = [2];
     this.actuator.updateCurrentlyUnlocked(this.tileTypes);
+    this.tilesSeen = [2];
   } 
 
   this.score        = 0;
@@ -167,6 +168,8 @@ GameManager.prototype.move = function (direction) {
         self.score += newPrimes.reduce(function(x,y){return x+y});
       }
 
+      self.tilesSeen.push.apply(self.tilesSeen, newPrimes);
+
       var verb = " unlocked!";
       if (newPrimes.filter(function(x){return x > ominosityBound}).length)
         verb = " unleashed!";
@@ -220,8 +223,11 @@ GameManager.prototype.move = function (direction) {
 
     this.addRandomTile();
 
-    if (!this.movesAvailable()) {
-      this.over = true; // Game over!
+    if (!this.movesAvailable()) { // Game over!
+      if ((this.gameMode & 3) == 3)
+        this.over = { tilesSeen: this.tilesSeen };
+      else
+        this.over = {};
     }
 
     this.actuate();

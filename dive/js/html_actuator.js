@@ -8,8 +8,9 @@ function HTMLActuator() {
 
   this.score = 0;
   
-  this.overlayPrimes = [7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 
-  73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139];
+  this.overlayPrimes = [7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 
+    53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113, 127, 
+    131, 137, 139];
 }
 
 HTMLActuator.prototype.actuate = function (grid, metadata) {
@@ -29,8 +30,7 @@ HTMLActuator.prototype.actuate = function (grid, metadata) {
     self.updateScore(metadata.score);
     self.updateBestScore(metadata.bestScore);
 
-    if (metadata.over) self.message(false); // You lose
-    if (metadata.won) self.message(true); // You win!
+    if (metadata.over) self.message(metadata.over); // You lose.  There's no win condition.
   });
 };
 
@@ -175,13 +175,23 @@ HTMLActuator.prototype.announce = function (message) {
   setTimeout(this.removeFirstChild.bind(this,this.announcer),2500);
 };
 
-HTMLActuator.prototype.message = function (won) {
-  var type    = won ? "game-won" : "game-over";
-  var message = won ? "You win!" : "Game over!";
+HTMLActuator.prototype.message = function (game_over_data) {
+  var type    = false ? "game-won" : "game-over";
+  var message = false ? "You win!" : "Game over!";
 
   this.clearContainer(this.announcer);
   this.messageContainer.classList.add(type);
   this.messageContainer.getElementsByTagName("p")[0].textContent = message;
+  
+  if ("tilesSeen" in game_over_data) {
+    var seen = game_over_data.tilesSeen;
+    seen.sort(function (a,b){return a-b});
+    for (var i = seen.length - 2; i >= 0; i--)
+      if (seen[i] == seen[i+1])
+        seen.splice(i,1);
+    this.currentlyUnlocked.textContent = seen.join(", ");
+    this.currentlyUnlocked.classList.add("all-seeds-seen");
+  }
 };
 
 HTMLActuator.prototype.clearMessage = function () {
@@ -190,8 +200,9 @@ HTMLActuator.prototype.clearMessage = function () {
 
 HTMLActuator.prototype.updateCurrentlyUnlocked = function (list) {
   this.currentlyUnlocked.classList.remove("hidden");
+  this.currentlyUnlocked.classList.remove("all-seeds-seen");
 
-  //this.currentlyUnlocked.textContent = list.join(", ");
+  this.currentlyUnlocked.textContent = "";
   this.clearContainer(this.currentlyUnlocked);
 
   var self = this;
@@ -206,6 +217,6 @@ HTMLActuator.prototype.updateCurrentlyUnlocked = function (list) {
 HTMLActuator.prototype.clearCurrentlyUnlocked = function () {
   this.currentlyUnlocked.classList.add("hidden");
 
-  //this.currentlyUnlocked.textContent = "";
+  this.currentlyUnlocked.textContent = "";
   this.clearContainer(this.currentlyUnlocked);
 };

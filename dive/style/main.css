@@ -106,8 +106,8 @@ h1.title {
   content: "Best"; }
 
 .currently-unlocked:after {
-  content: "Seeds";
-}
+  content: "Seeds"; }
+.currently-unlocked.all-seeds-seen:after { content: "All seeds seen"; }
 
 p {
   margin-top: 0;
