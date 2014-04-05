@@ -147,7 +147,6 @@ GameManager.prototype.move = function (direction) {
           // Unlock new primes, if in that mode
           if (self.gameMode & 1) {
             var primes = self.extractNewPrimes(merged.value);
-            self.tileTypes = self.tileTypes.concat(primes);
             newPrimes = newPrimes.concat(primes);
           }
         } else { // if (tile)
@@ -160,6 +159,17 @@ GameManager.prototype.move = function (direction) {
       }
     });
   });
+
+  if (self.gameMode & 1) {
+    // remove duplicates
+    if (newPrimes.length >= 2) {
+      newPrimes.sort(function (a,b){return a-b});
+      for (var i = newPrimes.length - 2; i >= 0; i--)
+        if (newPrimes[i] == newPrimes[i+1])
+          newPrimes.splice(i,1);
+    }        
+    self.tileTypes = self.tileTypes.concat(newPrimes);
+  }
 
   if (moved) {
     if ((self.gameMode & 1) && newPrimes.length) {
