@@ -189,8 +189,8 @@ GameManager.prototype.move = function (direction) {
       }
       self.actuator.announce(list + verb);
       self.actuator.updateCurrentlyUnlocked(self.tileTypes);
-    } // mode 1
-    
+    } // mode 1 only
+        
     if ((self.gameMode & 3) == 3) {
       // Eliminate primes now absent.
       var eliminatedIndices = [];
@@ -209,7 +209,7 @@ GameManager.prototype.move = function (direction) {
           }
         });
       });
-      
+          
       eliminatedIndices = eliminatedIndices.filter(function (x) {return x != null});
       if (eliminatedIndices.length) {
         var eliminatedPrimes = eliminatedIndices.map(function (x) {return self.tileTypes[x]});
@@ -225,7 +225,7 @@ GameManager.prototype.move = function (direction) {
         self.actuator.announce(list + verb);
         self.actuator.updateCurrentlyUnlocked(self.tileTypes);
       }
-      
+        
       for(var i = eliminatedIndices.length - 1; i >= 0; i--)
         self.tileTypes.splice(eliminatedIndices[i],1);
       self.actuator.updateCurrentlyUnlocked(self.tileTypes);
@@ -249,12 +249,21 @@ GameManager.prototype.div = function (next, cur) {
     return next + cur
 };
 
+// Do the factor extraction in the way yielding the least result
+GameManager.prototype.extractPrimesFrom = function(n, i) {
+  if (i >= this.tileTypes.length) return n;
+  var min = this.extractPrimesFrom(n, i+1);
+  while (n % this.tileTypes[i] == 0) {
+    n /= this.tileTypes[i];
+    var comparandum = this.extractPrimesFrom(n, i+1);
+    if (comparandum < min)
+      min = comparandum;
+  }
+  return min;
+}
+
 GameManager.prototype.extractNewPrimes = function (n) {
-  this.tileTypes.forEach(function (p) {
-      while ((n % p) == 0)
-        n /= p;
-    } 
-  );
+  n = this.extractPrimesFrom(n, 0);
   if (n > 1)
     return [n];
   return [];
