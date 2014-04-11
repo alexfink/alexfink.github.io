@@ -189,7 +189,11 @@ HTMLActuator.prototype.message = function (game_over_data) {
     for (var i = seen.length - 2; i >= 0; i--)
       if (seen[i] == seen[i+1])
         seen.splice(i,1);
-    this.currentlyUnlocked.textContent = seen.join(", ");
+
+    for (var i = 0; i < seen.length; i++)
+        if (game_over_data.tileTypes.indexOf(seen[i]) == -1)
+            seen[i] = "<span class=\"ghost\">" + seen[i] + "</span>"; // ick
+    this.currentlyUnlocked.innerHTML = seen.join(", ");
     this.currentlyUnlocked.classList.add("all-seeds-seen");
   }
 };

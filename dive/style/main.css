@@ -113,6 +113,7 @@ h1.title {
 .currently-unlocked.all-seeds-seen:after { 
   content: "All seeds seen"; 
 }
+.currently-unlocked .ghost { color: #d4c8bd; }
 
 p {
   margin-top: 0;

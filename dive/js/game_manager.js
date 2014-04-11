@@ -235,7 +235,8 @@ GameManager.prototype.move = function (direction) {
 
     if (!this.movesAvailable()) { // Game over!
       if ((this.gameMode & 3) == 3)
-        this.over = { tilesSeen: this.tilesSeen };
+        this.over = { tileTypes: this.tileTypes,
+                      tilesSeen: this.tilesSeen };
       else
         this.over = {};
     }
