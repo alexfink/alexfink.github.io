@@ -29,11 +29,15 @@ GameManager.prototype.setup = function () {
   if (this.gameMode & 1) {
     this.tileTypes = [2];
     this.actuator.updateCurrentlyUnlocked(this.tileTypes);
+    this.tilesSeen = [2];
   } 
 
   this.score        = 0;
   this.over         = false;
   this.won          = false;
+
+  // Set game mode for best score
+  this.scoreManager.setGameMode(this.gameMode);
 
   // Add the initial tiles
   this.addStartTiles();
@@ -108,6 +112,16 @@ GameManager.prototype.move = function (direction) {
   // Save the current tile positions and remove merger information
   this.prepareTiles();
 
+  var ominosityBound;
+  if (self.gameMode && 1) {
+    // The idea of this is that a seed is ominous roughly if it exceeds 
+    // the 2i-th prime, if there are i seeds so far.
+    // But add a little more, to be forgiving.
+    ominosityBound = self.tileTypes.length * 2;
+    ominosityBound *= Math.log(ominosityBound);
+    ominosityBound += 8;
+  }
+
   // Traverse the grid in the right direction and move tiles
   traversals.x.forEach(function (x) {
     traversals.y.forEach(function (y) {
@@ -134,7 +148,6 @@ GameManager.prototype.move = function (direction) {
           // Unlock new primes, if in that mode
           if (self.gameMode & 1) {
             var primes = self.extractNewPrimes(merged.value);
-            self.tileTypes = self.tileTypes.concat(primes);
             newPrimes = newPrimes.concat(primes);
           }
         } else { // if (tile)
@@ -148,6 +161,17 @@ GameManager.prototype.move = function (direction) {
     });
   });
 
+  if (self.gameMode & 1) {
+    // remove duplicates
+    if (newPrimes.length >= 2) {
+      newPrimes.sort(function (a,b){return a-b});
+      for (var i = newPrimes.length - 2; i >= 0; i--)
+        if (newPrimes[i] == newPrimes[i+1])
+          newPrimes.splice(i,1);
+    }        
+    self.tileTypes = self.tileTypes.concat(newPrimes);
+  }
+
   if (moved) {
     if ((self.gameMode & 1) && newPrimes.length) {
       // in mode 1, score for unlocking
@@ -155,14 +179,19 @@ GameManager.prototype.move = function (direction) {
         self.score += newPrimes.reduce(function(x,y){return x+y});
       }
 
+      self.tilesSeen.push.apply(self.tilesSeen, newPrimes);
+
+      var verb = " unlocked!";
+      if (newPrimes.filter(function(x){return x > ominosityBound}).length)
+        verb = " unleashed!";
       var list = String(newPrimes.pop());
       if (newPrimes.length) {
         list = newPrimes.join(", ") + " and " + list;
       }
-      self.actuator.announce(list + " unlocked!");
+      self.actuator.announce(list + verb);
       self.actuator.updateCurrentlyUnlocked(self.tileTypes);
-    } // mode 1
-    
+    } // mode 1 only
+        
     if ((self.gameMode & 3) == 3) {
       // Eliminate primes now absent.
       var eliminatedIndices = [];
@@ -181,20 +210,23 @@ GameManager.prototype.move = function (direction) {
           }
         });
       });
-      
+          
       eliminatedIndices = eliminatedIndices.filter(function (x) {return x != null});
       if (eliminatedIndices.length) {
         var eliminatedPrimes = eliminatedIndices.map(function (x) {return self.tileTypes[x]});
         self.score += eliminatedPrimes.reduce(function(x,y){return x+y});
 
+        var verb = " eliminated!"
+        if (eliminatedPrimes.filter(function(x){return x > ominosityBound}).length)
+          verb = " vanquished!";
         var list = String(eliminatedPrimes.pop());
         if (eliminatedPrimes.length) {
           list = eliminatedPrimes.join(", ") + " and " + list;
         }
-        self.actuator.announce(list + " eliminated!");
+        self.actuator.announce(list + verb);
         self.actuator.updateCurrentlyUnlocked(self.tileTypes);
       }
-      
+        
       for(var i = eliminatedIndices.length - 1; i >= 0; i--)
         self.tileTypes.splice(eliminatedIndices[i],1);
       self.actuator.updateCurrentlyUnlocked(self.tileTypes);
@@ -202,8 +234,12 @@ GameManager.prototype.move = function (direction) {
 
     this.addRandomTile();
 
-    if (!this.movesAvailable()) {
-      this.over = true; // Game over!
+    if (!this.movesAvailable()) { // Game over!
+      if ((this.gameMode & 3) == 3)
+        this.over = { tileTypes: this.tileTypes,
+                      tilesSeen: this.tilesSeen };
+      else
+        this.over = {};
     }
 
     this.actuate();
@@ -215,12 +251,21 @@ GameManager.prototype.div = function (next, cur) {
     return next + cur
 };
 
+// Do the factor extraction in the way yielding the least result
+GameManager.prototype.extractPrimesFrom = function(n, i) {
+  if (i >= this.tileTypes.length) return n;
+  var min = this.extractPrimesFrom(n, i+1);
+  while (n % this.tileTypes[i] == 0) {
+    n /= this.tileTypes[i];
+    var comparandum = this.extractPrimesFrom(n, i+1);
+    if (comparandum < min)
+      min = comparandum;
+  }
+  return min;
+}
+
 GameManager.prototype.extractNewPrimes = function (n) {
-  this.tileTypes.forEach(function (p) {
-      while ((n % p) == 0)
-        n /= p;
-    } 
-  );
+  n = this.extractPrimesFrom(n, 0);
   if (n > 1)
     return [n];
   return [];

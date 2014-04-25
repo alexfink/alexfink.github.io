@@ -54,24 +54,29 @@ h1.title {
   text-align: right; }
 
 .currently-unlocked {
-  margin-top: 15px; 
   display: block; 
+  height: 42.5px;
+  line-height: 64.5px;
+  padding: 25px 0px 15px;
 }
 .currently-unlocked.hidden { display: none; }
+.currently-unlocked.all-seeds-seen {
+  line-height: 30px;
+}
 
 .score-container, .best-container, .currently-unlocked {
   background: #bbada0;
-  padding: 15px 25px;
   font-size: 25px;
-  height: 25px;
   font-weight: bold;
   border-radius: 3px;
   color: white;
   margin-top: 8px;
   text-align: center; 
-  line-height: 47px; 
   position: relative; }
 .score-container, .best-container {
+  padding: 15px 25px;
+  height: 25px;
+  line-height: 47px; 
   display: inline-block; }
   .score-container:after, .best-container:after, .currently-unlocked:after {
     text-transform: uppercase;
@@ -104,8 +109,11 @@ h1.title {
   content: "Best"; }
 
 .currently-unlocked:after {
-  content: "Seeds";
+  content: "Seeds"; }
+.currently-unlocked.all-seeds-seen:after { 
+  content: "All seeds seen"; 
 }
+.currently-unlocked .ghost { color: #d4c8bd; }
 
 p {
   margin-top: 0;
@@ -153,7 +161,7 @@ hr {
     opacity: 1; } }
 
 .game-container {
-  margin-top: 40px;
+  margin-top: 15px;
   position: relative;
   padding: 15px;
   cursor: default;
@@ -183,27 +191,23 @@ hr {
     -moz-animation-fill-mode: both; }
     .game-container .announcer {
       position: absolute;
-      top: 0;
+      top: 218px;
       left: 0;
       z-index: 1000;
       width: 100%;
-      height: 100%;
+      height: 56.4%;
       pointer-events: none;
       -webkit-transform: translateZ(300px);
       -moz-transform: translateZ(300px);
       transform: translateZ(300px); }
       .game-container .announcer .announcement {
-        position: absolute;
+        position: relative;
         color: rgba(59, 55, 50, 0.9);
         font-size: 48px;
         font-weight: bold;
         text-align: center;
         line-height: 1.0em;
-        height: 90px;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
+        height: 64px;
         margin: auto;
         -webkit-animation: fade-in-out 600ms ease-in;
         -moz-animation: fade-in-out 600ms ease-in;
@@ -548,42 +552,200 @@ hr {
 .tileoverlay.tileoverlay-121  { 
   background: url('http://alexfink.github.io/dive/tileoverlays/121.png'); 
   background-size: cover; }
-.tileoverlay.tileoverlay-13   { 
+.tileoverlay.tileoverlay-13 { 
   background: url('http://alexfink.github.io/dive/tileoverlays/13.png'); 
   background-size: cover; }
-.tileoverlay.tileoverlay-169  { 
+.tileoverlay.tileoverlay-169 { 
   background: url('http://alexfink.github.io/dive/tileoverlays/169.png'); 
   background-size: cover; }
-.tileoverlay.tileoverlay-17   { 
+.tileoverlay.tileoverlay-17 { 
   background: url('http://alexfink.github.io/dive/tileoverlays/17.png'); 
   background-size: cover; }
-.tileoverlay.tileoverlay-289  { 
+.tileoverlay.tileoverlay-289 { 
   background: url('http://alexfink.github.io/dive/tileoverlays/289.png'); 
   background-size: cover; }
-.tileoverlay.tileoverlay-19   { 
+.tileoverlay.tileoverlay-19 { 
   background: url('http://alexfink.github.io/dive/tileoverlays/19.png'); 
   background-size: cover; }
-.tileoverlay.tileoverlay-361  { 
+.tileoverlay.tileoverlay-361 { 
   background: url('http://alexfink.github.io/dive/tileoverlays/361.png'); 
   background-size: cover; }
-.tileoverlay.tileoverlay-23   { 
+.tileoverlay.tileoverlay-23 { 
   background: url('http://alexfink.github.io/dive/tileoverlays/23.png'); 
   background-size: cover; }
-.tileoverlay.tileoverlay-529  { 
+.tileoverlay.tileoverlay-529 { 
   background: url('http://alexfink.github.io/dive/tileoverlays/529.png'); 
   background-size: cover; }
-.tileoverlay.tileoverlay-29   { 
+.tileoverlay.tileoverlay-29 { 
   background: url('http://alexfink.github.io/dive/tileoverlays/29.png'); 
   background-size: cover; }
-.tileoverlay.tileoverlay-841  { 
+.tileoverlay.tileoverlay-841 { 
   background: url('http://alexfink.github.io/dive/tileoverlays/841.png'); 
   background-size: cover; }
-.tileoverlay.tileoverlay-31   { 
+.tileoverlay.tileoverlay-31 { 
   background: url('http://alexfink.github.io/dive/tileoverlays/31.png'); 
   background-size: cover; }
-.tileoverlay.tileoverlay-961  { 
+.tileoverlay.tileoverlay-961 { 
   background: url('http://alexfink.github.io/dive/tileoverlays/961.png'); 
   background-size: cover; }
+.tileoverlay.tileoverlay-37 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/37.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-1369 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/1369.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-41 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/41.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-1681 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/1681.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-43 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/43.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-1849 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/1849.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-47 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/47.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-2209 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/2209.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-53 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/53.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-2809 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/2809.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-59 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/59.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-3481 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/3481.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-61 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/61.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-3721 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/3721.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-67 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/67.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-4489 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/4489.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-71 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/71.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-5041 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/5041.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-73 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/73.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-5329 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/5329.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-79 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/79.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-6241 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/6241.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-83 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/83.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-6889 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/6889.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-89 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/89.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-7921 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/7921.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-97 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/97.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-9409 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/9409.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-101 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/101.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-10201 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/10201.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-103 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/103.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-10609 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/10609.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-107 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/107.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-11449 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/11449.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-109 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/109.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-11881 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/11881.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-113 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/113.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-12769 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/12769.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-127 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/127.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-16129 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/16129.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-131 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/131.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-17161 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/17161.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-137 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/137.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-18769 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/18769.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-139 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/139.png'); 
+  background-size: cover; }
+.tileoverlay.tileoverlay-19321 { 
+  background: url('http://alexfink.github.io/dive/tileoverlays/19321.png'); 
+  background-size: cover; }
+
+.tile.minitile, .tile.minitile .tilenumber, .tile.minitile .tileoverlay {
+  width: 42.5px; 
+  height: 42.5px; 
+  display: inline-block; }
+.tile.minitile {  
+  position: relative; 
+  line-height: 52.5px;
+  margin: 3px; 
+}
+.tile.minitile .tilenumber {
+  font-size: 27.5px; }
+.tile.minitile .tilenumber.tile-small-3 {
+  font-size: 22px !important; }
+.tile.minitile .tilenumber.tile-small-4 {
+  font-size: 17.6px !important; }
+.tile.minitile .tilenumber.tile-small-5 {
+  font-size: 21px !important; }
+.tile.minitile .tilenumber.tile-small-6 {
+  font-size: 10px !important; }
 
 
 @-webkit-keyframes appear {
@@ -704,8 +866,11 @@ hr {
 
   .score-container, .best-container, .currently-unlocked {
     margin-top: 0;
-    padding: 15px 10px;
     min-width: 40px; }
+  .score-container, .best-container {
+    padding: 15px 10px; }
+  .currently-unlocked {
+    padding: 25px 0px 15px; }
 
   .heading {
     margin-bottom: 10px; }
@@ -727,27 +892,23 @@ hr {
     box-sizing: border-box; }
     .game-container .announcer {
       position: absolute;
-      top: 0;
+      top: 122px;
       left: 0;
       z-index: 1000;
       width: 100%;
-      height: 100%;
+      height: 56.4%;
       pointer-events: none;
       -webkit-transform: translateZ(300px);
       -moz-transform: translateZ(300px);
       transform: translateZ(300px); }
       .game-container .announcer .announcement {
-        position: absolute;
+        position: relative;
         color: rgba(59, 55, 50, 0.9);
         font-size: 48px;
         font-weight: bold;
         text-align: center;
         line-height: 1.0em;
-        height: 90px;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
+        height: 64px;
         margin: auto;
         -webkit-animation: fade-in-out 600ms ease-in;
         -moz-animation: fade-in-out 600ms ease-in;
@@ -912,6 +1073,13 @@ hr {
     font-size: 21px !important; }
   .tilenumber.tile-small-6 {
     font-size: 14px !important; }
+
+  .tile.minitile, .tile.minitile .tilenumber, .tile.minitile .tileoverlay {
+    width: 23px; 
+    height: 23px; }
+  .tile.minitile {  
+    line-height: 33px;
+  }
 
   .game-message p {
     font-size: 30px !important;
