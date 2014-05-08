@@ -124,6 +124,13 @@ HTMLActuator.prototype.createTile = function (tile, animate) {
   return element;
 }
 
+HTMLActuator.prototype.createMiniTile = function (value) { 
+  var tile = new Tile ({x: null, y: null}, value);
+  var tileElement = this.createTile(tile, false);
+  tileElement.classList.add("minitile");
+  return tileElement;
+};
+
 HTMLActuator.prototype.addTile = function (tile) {
   var element = this.createTile(tile, true);
 
@@ -152,7 +159,9 @@ HTMLActuator.prototype.updateScore = function (score) {
   var difference = score - this.score;
   this.score = score;
 
-  this.scoreContainer.textContent = this.score;
+  var tile = new Tile({x: null, y: null}, score);
+  var tileElement = this.createTile(tile, false)
+  this.scoreContainer.appendChild(tileElement);
 
   if (difference > 0) {
     var addition = document.createElement("div");
@@ -164,7 +173,10 @@ HTMLActuator.prototype.updateScore = function (score) {
 };
 
 HTMLActuator.prototype.updateBestScore = function (bestScore) {
-  this.bestContainer.textContent = bestScore;
+  this.clearContainer(this.bestContainer);
+  var tile = new Tile({x: null, y: null}, bestScore);
+  var tileElement = this.createTile(tile, false)
+  this.bestContainer.appendChild(tileElement);
 };
 
 HTMLActuator.prototype.announce = function (message) {
@@ -190,10 +202,15 @@ HTMLActuator.prototype.message = function (game_over_data) {
       if (seen[i] == seen[i+1])
         seen.splice(i,1);
 
-    for (var i = 0; i < seen.length; i++)
-        if (game_over_data.tileTypes.indexOf(seen[i]) == -1)
-            seen[i] = "<span class=\"ghost\">" + seen[i] + "</span>"; // ick
-    this.currentlyUnlocked.innerHTML = seen.join(", ");
+    this.clearContainer(this.currentlyUnlocked);
+
+    for (var i = 0; i < seen.length; i++) {
+        var seenElem = this.createMiniTile(seen[i]);
+        if (game_over_data.tileTypes.indexOf(seen[i]) == -1) {
+            seenElem.classList.add('ghost');
+        }
+        this.currentlyUnlocked.appendChild(seenElem);
+    }
     this.currentlyUnlocked.classList.add("all-seeds-seen");
   }
 };
@@ -211,10 +228,7 @@ HTMLActuator.prototype.updateCurrentlyUnlocked = function (list) {
 
   var self = this;
   list.forEach(function (value) {
-    var tile = new Tile ({ x: null, y: null }, value);
-    var tileElement = self.createTile(tile, false);
-    tileElement.classList.add("minitile");
-    self.currentlyUnlocked.appendChild(tileElement);
+    self.currentlyUnlocked.appendChild(self.createMiniTile(value));
   });
 }
 

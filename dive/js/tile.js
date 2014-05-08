@@ -1,7 +1,12 @@
 function Tile(position, value) {
+  if (position.x && position.y && !value) { 
+    console.log("missing value!", value); 
+    value = 2;
+  }
+
   this.x                = position.x;
   this.y                = position.y;
-  this.value            = value || 2;
+  this.value            = value || 0;
 
   this.previousPosition = null;
   this.mergedFrom       = null; // Tracks tiles that merged together
