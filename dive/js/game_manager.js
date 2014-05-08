@@ -1,7 +1,7 @@
 function GameManager(size, InputManager, Actuator, ScoreManager) {
   this.size         = size; // Size of the grid
   this.inputManager = new InputManager;
-  this.scoreManager = new ScoreManager; // will be tossed out immediately
+  this.scoreManager = new ScoreManager;
   this.actuator     = new Actuator;
 
   this.startTiles   = 2;
@@ -10,7 +10,6 @@ function GameManager(size, InputManager, Actuator, ScoreManager) {
   this.inputManager.on("restart", this.restart.bind(this));
 
   this.setup();
-  this.scoreManager = new ScoreManager;
 }
 
 // Restart the game
