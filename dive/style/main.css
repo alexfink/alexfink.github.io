@@ -8,17 +8,23 @@ html, body {
   font-size: 18px; }
 
 body {
-  margin: 80px 0; }
+  margin: 40px 0; 
+  }
 
+.heading {
+  padding: 10px;
+  }
+  
 .heading:after {
   content: "";
   display: block;
-  clear: both; }
+  clear: both; 
+  }
 
 h1.title {
   font-size: 80px;
   font-weight: bold;
-  margin: 0;
+  margin: 20px 0;
   display: block;
   float: left; }
 
@@ -51,7 +57,9 @@ h1.title {
 
 .scores-container {
   float: right;
-  text-align: right; }
+  text-align: right; 
+  padding: 0;
+  }
 
 .currently-unlocked {
   display: block; 
@@ -62,21 +70,21 @@ h1.title {
 .currently-unlocked.hidden { display: none; }
 .currently-unlocked.all-seeds-seen {
   line-height: 30px;
+  height: auto;
+  padding: 25px 0 0 0;
 }
 
 .score-container, .best-container, .currently-unlocked {
   background: #bbada0;
   font-size: 25px;
   font-weight: bold;
-  border-radius: 3px;
+  border-radius: 6px;
   color: white;
   margin-top: 8px;
   text-align: center; 
   position: relative; }
 .score-container, .best-container {
-  padding: 15px 25px;
-  height: 25px;
-  line-height: 47px; 
+  margin-left: 10px;
   display: inline-block; }
   .score-container:after, .best-container:after, .currently-unlocked:after {
     text-transform: uppercase;
@@ -87,11 +95,12 @@ h1.title {
     width: 100%;
     top: 10px;
     left: 0; 
-    line-height: 13px; }
+    line-height: 13px; 
+    z-index: 11;
+    }
   .score-container .score-addition, .best-container .score-addition {
     position: absolute;
     right: 30px;
-    color: red;
     font-size: 25px;
     line-height: 25px;
     font-weight: bold;
@@ -113,7 +122,7 @@ h1.title {
 .currently-unlocked.all-seeds-seen:after { 
   content: "All seeds seen"; 
 }
-.currently-unlocked .ghost { color: #d4c8bd; }
+.currently-unlocked .ghost { opacity: 0.25; }
 
 p {
   margin-top: 0;
@@ -358,7 +367,7 @@ hr {
   z-index: 12;
 }
 .tilenumber.tile-small-4 {
-  font-size: 44px !important; }
+  font-size: 42px !important; }
 .tilenumber.tile-small-5 {
   font-size: 35px !important; }
 .tilenumber.tile-small-6 {
@@ -538,7 +547,7 @@ hr {
   position: absolute;
   left: 0;
   top: 0;
-  z-index: 11;
+  z-index: 10;
   background-image: url('http://alexfink.github.io/dive/tileoverlays/sprite.png'); 
   background-size: 200% auto;
 }
@@ -813,7 +822,7 @@ hr {
     padding: 0 20px; }
 
   h1.title {
-    font-size: 27px;
+    font-size: 35px;
     margin-top: 15px; }
 
   .container {
@@ -823,10 +832,6 @@ hr {
   .score-container, .best-container, .currently-unlocked {
     margin-top: 0;
     min-width: 40px; }
-  .score-container, .best-container {
-    padding: 15px 10px; }
-  .currently-unlocked {
-    padding: 25px 0px 15px; }
 
   .heading {
     margin-bottom: 10px; }
@@ -1023,19 +1028,38 @@ hr {
     height: 57.5px;
     font-size: 35px; 
    }
-  .tilenumber.tile-small-4 {
+  .tilenumber.tile-small-3 {
     font-size: 28px !important; }
+  .tilenumber.tile-small-4 {
+    font-size: 22px !important; }
   .tilenumber.tile-small-5 {
-    font-size: 21px !important; }
+    font-size: 18px !important; }
   .tilenumber.tile-small-6 {
-    font-size: 14px !important; }
+    font-size: 15px !important; }
 
   .tile.minitile, .tile.minitile .tilenumber, .tile.minitile .tileoverlay {
+    font-size: 18px;
+    line-height: 28px;
     width: 23px; 
-    height: 23px; }
-  .tile.minitile {  
-    line-height: 33px;
-  }
+    height: 23px; 
+    }
+
+  .tile.minitile {
+    margin: 2px;
+    }
+
+  .tile.minitile .tilenumber.tile-small-3 {
+    font-size: 14px !important; }
+  .tile.minitile .tilenumber.tile-small-4 {
+    font-size: 12px !important; }
+  .tile.minitile .tilenumber.tile-small-5 {
+    font-size: 10px !important; }
+  .tile.minitile .tilenumber.tile-small-6 {
+    font-size: 8px !important; }
+
+  .score-container:after, .best-container:after, .currently-unlocked:after {
+    top: 6px;
+    }
 
   .game-message p {
     font-size: 30px !important;
