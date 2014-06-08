@@ -258,8 +258,8 @@ hr {
     clear: both; }
 
 .grid-cell {
-  width: 106.25px;
-  height: 106.25px;
+  width: 106px;
+  height: 106px;
   margin-right: 15px;
   float: left;
   border-radius: 3px;
@@ -272,9 +272,9 @@ hr {
   z-index: 2; }
 
 .tile {
-  width: 106.25px;
-  height: 106.25px;
-  line-height: 116.25px; }
+  width: 106px;
+  height: 106px;
+  line-height: 116px; }
   .tile.tile-position-1-1 {
     position: absolute;
     left: 0px;
@@ -341,8 +341,8 @@ hr {
     top: 364px; }
 
 .tilenumber {
-  width: 106.25px;
-  height: 106.25px;
+  width: 106px;
+  height: 106px;
   position: absolute;
   left: 0;
   top: 0;
@@ -533,8 +533,8 @@ hr {
   .tile.tile-1296000  { background: #fff; }
 
 .tileoverlay { 
-  width: 106.25px;
-  height: 106.25px;
+  width: 106px;
+  height: 106px;
   position: absolute;
   left: 0;
   top: 0;
