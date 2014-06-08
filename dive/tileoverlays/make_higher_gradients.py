@@ -8,7 +8,7 @@ primes = [13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71,
 levels = [[0, 4, 8, 10, 12, 13, 14, 15], [0, 4, 8, 12, 15], [0, 8, 12, 15]]
 image_size = 212
 
-# Yes, this function is teeming with bad code reuse.  Ah well.
+# Yes, this whole thing is teeming with bad code reuse.  Ah well.
 def wavy(colour, direction, frequency, attenuation, has_sevens, supercolour, superfrequency, superattenuation, supersupercolour):
   colour_data = []
   alpha_data = []
@@ -93,14 +93,16 @@ for p in primes:
 
   if residue > 1:
     supercolour, supersevens, superresidue = base_colour((residue+1)/2)
+    if supersevens > 1:
+      raise NotImplementedError, "I don't know what to do if there's a seven at the second step" % p
     if superresidue > 1:
       supersupercolour, supersupersevens, supersuperresidue = base_colour((superresidue+1)/2)
+      if supersupersevens > 1 or supersuperresidue > 1:
+        raise NotImplementedError, "I don't know what to do if it's not smooth at the third step" % p
       if supercolour == [127.5, 127.5, 127.5]:
         supercolour = [0.0, 0.0, 0.0]
     else:
       supersupercolour = None
-    if supersevens > 1:
-      raise NotImplementedError, "I don't know what to do if there's a seven at the second step" % p
     if colour == [127.5, 127.5, 127.5]:
       colour = [0.0, 0.0, 0.0]
     superfrequency = math.sqrt(residue)*2/3.0
@@ -112,9 +114,11 @@ for p in primes:
     supersupercolour = None
 
   im = wavy(colour, direction, frequency, attenuation, sevens > 0, supercolour, superfrequency, superattenuation, supersupercolour) 
-  print (".tileoverlay.tileoverlay-%d { \n  background: url('http://alexfink.github.io/dive/tileoverlays/%d.png'); \n  background-size: cover; }") % (p, p)
-  im.save("%s.png" % p)
+  print (".tileoverlay.tileoverlay-%d { \n  background-image: url('http://alexfink.github.io/dive/tileoverlays/%d.png'); }") % (p, p)
+#  im.save("c0r%d.png" % p_index)
+  im.save("%d.png" % p)
   im = wavy(colour, direction, frequency, 2*attenuation, sevens > 0, supercolour, superfrequency, superattenuation, supersupercolour) 
-  print (".tileoverlay.tileoverlay-%d { \n  background: url('http://alexfink.github.io/dive/tileoverlays/%d.png'); \n  background-size: cover; }") % (p*p, p*p)
-  im.save("%s.png" % (p*p))
+  print (".tileoverlay.tileoverlay-%d { \n  background-image: url('http://alexfink.github.io/dive/tileoverlays/%d.png'); }") % (p*p, p*p)
+#  im.save("c1r%d.png" % p_index)
+  im.save("%d.png" % (p*p))
 
