@@ -542,130 +542,146 @@ hr {
   background-image: url('http://alexfink.github.io/dive/tileoverlays/sprite.png'); 
   background-size: 200% auto;
 }
-.tileoverlay.tileoverlay-7    { 
-  background-position: 0% 0%; }
-.tileoverlay.tileoverlay-49   { 
-  background-position: -100% 0%; }
-.tileoverlay.tileoverlay-11    { 
-  background-position: 0% -100%; }
-.tileoverlay.tileoverlay-121  { 
-  background-position: -100% -100%; }
-.tileoverlay.tileoverlay-13 { 
-  background-position: 0% -200%; }
-.tileoverlay.tileoverlay-169 { 
-  background-position: -100% -200%; }
-.tileoverlay.tileoverlay-17 { 
-  background-position: 0% -300%; }
-.tileoverlay.tileoverlay-289 { 
-  background-position: -100% -300%; }
-.tileoverlay.tileoverlay-19 { 
-  background-position: 0% -400%; }
-.tileoverlay.tileoverlay-361 { 
-  background-position: -100% -400%; }
-.tileoverlay.tileoverlay-23 { 
-  background-position: 0% -500%; }
-.tileoverlay.tileoverlay-529 { 
-  background-position: -100% -500%; }
-.tileoverlay.tileoverlay-29 { 
-  background-position: 0% -600%; }
-.tileoverlay.tileoverlay-841 { 
-  background-position: -100% -600%; }
-.tileoverlay.tileoverlay-31 { 
-  background-position: 0% -700%; }
-.tileoverlay.tileoverlay-961 { 
-  background-position: -100% -700%; }
-.tileoverlay.tileoverlay-37 { 
-  background-position: 0% -800%; }
-.tileoverlay.tileoverlay-1369 { 
-  background-position: -100% -800%; }
-.tileoverlay.tileoverlay-41 { 
-  background-position: 0% -900%; }
-.tileoverlay.tileoverlay-1681 { 
-  background-position: -100% -900%; }
-.tileoverlay.tileoverlay-43 { 
-  background-position: 0% -1000%; }
-.tileoverlay.tileoverlay-1849 { 
-  background-position: -100% -1000%; }
-.tileoverlay.tileoverlay-47 { 
-  background-position: 0% -1100%; }
-.tileoverlay.tileoverlay-2209 { 
-  background-position: -100% -1100%; }
-.tileoverlay.tileoverlay-53 { 
-  background-position: 0% -1200%; }
-.tileoverlay.tileoverlay-2809 { 
-  background-position: -100% -1200%; }
-.tileoverlay.tileoverlay-59 { 
-  background-position: 0% -1300%; }
-.tileoverlay.tileoverlay-3481 { 
-  background-position: -100% -1300%; }
-.tileoverlay.tileoverlay-61 { 
-  background-position: 0% -1400%; }
-.tileoverlay.tileoverlay-3721 { 
-  background-position: -100% -1400%; }
-.tileoverlay.tileoverlay-67 { 
-  background-position: 0% -1500%; }
-.tileoverlay.tileoverlay-4489 { 
-  background-position: -100% -1500%; }
-.tileoverlay.tileoverlay-71 { 
-  background-position: 0% -1600%; }
-.tileoverlay.tileoverlay-5041 { 
-  background-position: -100% -1600%; }
-.tileoverlay.tileoverlay-73 { 
-  background-position: 0% -1700%; }
-.tileoverlay.tileoverlay-5329 { 
-  background-position: -100% -1700%; }
-.tileoverlay.tileoverlay-79 { 
-  background-position: 0% -1800%; }
-.tileoverlay.tileoverlay-6241 { 
-  background-position: -100% -1800%; }
-.tileoverlay.tileoverlay-83 { 
-  background-position: 0% -1900%; }
-.tileoverlay.tileoverlay-6889 { 
-  background-position: -100% -1900%; }
-.tileoverlay.tileoverlay-89 { 
-  background-position: 0% -2000%; }
-.tileoverlay.tileoverlay-7921 { 
-  background-position: -100% -2000%; }
-.tileoverlay.tileoverlay-97 { 
-  background-position: 0% -2100%; }
-.tileoverlay.tileoverlay-9409 { 
-  background-position: -100% -2100%; }
-.tileoverlay.tileoverlay-101 { 
-  background-position: 0% -2200%; }
-.tileoverlay.tileoverlay-10201 { 
-  background-position: -100% -2200%; }
-.tileoverlay.tileoverlay-103 { 
-  background-position: 0% -2300%; }
-.tileoverlay.tileoverlay-10609 { 
-  background-position: -100% -2300%; }
-.tileoverlay.tileoverlay-107 { 
-  background-position: 0% -2400%; }
-.tileoverlay.tileoverlay-11449 { 
-  background-position: -100% -2400%; }
-.tileoverlay.tileoverlay-109 { 
-  background-position: 0% -2500%; }
-.tileoverlay.tileoverlay-11881 { 
-  background-position: -100% -2500%; }
-.tileoverlay.tileoverlay-113 { 
-  background-position: 0% -2600%; }
-.tileoverlay.tileoverlay-12769 { 
-  background-position: -100% -2600%; }
-.tileoverlay.tileoverlay-127 { 
-  background-position: 0% -2700%; }
-.tileoverlay.tileoverlay-16129 { 
-  background-position: -100% -2700%; }
-.tileoverlay.tileoverlay-131 { 
-  background-position: 0% -2800%; }
-.tileoverlay.tileoverlay-17161 { 
-  background-position: -100% -2800%; }
-.tileoverlay.tileoverlay-137 { 
-  background-position: 0% -2900%; }
-.tileoverlay.tileoverlay-18769 { 
-  background-position: -100% -2900%; }
-.tileoverlay.tileoverlay-139 { 
-  background-position: 0% -3000%; }
-.tileoverlay.tileoverlay-19321 { 
-  background-position: -100% -3000%; }
+.tileoverlay.tileoverlay-7    { background-position: 0% 0%; }
+.tileoverlay.tileoverlay-49   { background-position: -100% 0%; }
+.tileoverlay.tileoverlay-11    { background-position: 0% -100%; }
+.tileoverlay.tileoverlay-121  { background-position: -100% -100%; }
+.tileoverlay.tileoverlay-13 { background-position: 0% -200%; }
+.tileoverlay.tileoverlay-169 { background-position: -100% -200%; }
+.tileoverlay.tileoverlay-17 { background-position: 0% -300%; }
+.tileoverlay.tileoverlay-289 { background-position: -100% -300%; }
+.tileoverlay.tileoverlay-19 { background-position: 0% -400%; }
+.tileoverlay.tileoverlay-361 { background-position: -100% -400%; }
+.tileoverlay.tileoverlay-23 { background-position: 0% -500%; }
+.tileoverlay.tileoverlay-529 { background-position: -100% -500%; }
+.tileoverlay.tileoverlay-29 { background-position: 0% -600%; }
+.tileoverlay.tileoverlay-841 { background-position: -100% -600%; }
+.tileoverlay.tileoverlay-31 { background-position: 0% -700%; }
+.tileoverlay.tileoverlay-961 { background-position: -100% -700%; }
+.tileoverlay.tileoverlay-37 { background-position: 0% -800%; }
+.tileoverlay.tileoverlay-1369 { background-position: -100% -800%; }
+.tileoverlay.tileoverlay-41 { background-position: 0% -900%; }
+.tileoverlay.tileoverlay-1681 { background-position: -100% -900%; }
+.tileoverlay.tileoverlay-43 { background-position: 0% -1000%; }
+.tileoverlay.tileoverlay-1849 { background-position: -100% -1000%; }
+.tileoverlay.tileoverlay-47 { background-position: 0% -1100%; }
+.tileoverlay.tileoverlay-2209 { background-position: -100% -1100%; }
+.tileoverlay.tileoverlay-53 { background-position: 0% -1200%; }
+.tileoverlay.tileoverlay-2809 { background-position: -100% -1200%; }
+.tileoverlay.tileoverlay-59 { background-position: 0% -1300%; }
+.tileoverlay.tileoverlay-3481 { background-position: -100% -1300%; }
+.tileoverlay.tileoverlay-61 { background-position: 0% -1400%; }
+.tileoverlay.tileoverlay-3721 { background-position: -100% -1400%; }
+.tileoverlay.tileoverlay-67 { background-position: 0% -1500%; }
+.tileoverlay.tileoverlay-4489 { background-position: -100% -1500%; }
+.tileoverlay.tileoverlay-71 { background-position: 0% -1600%; }
+.tileoverlay.tileoverlay-5041 { background-position: -100% -1600%; }
+.tileoverlay.tileoverlay-73 { background-position: 0% -1700%; }
+.tileoverlay.tileoverlay-5329 { background-position: -100% -1700%; }
+.tileoverlay.tileoverlay-79 { background-position: 0% -1800%; }
+.tileoverlay.tileoverlay-6241 { background-position: -100% -1800%; }
+.tileoverlay.tileoverlay-83 { background-position: 0% -1900%; }
+.tileoverlay.tileoverlay-6889 { background-position: -100% -1900%; }
+.tileoverlay.tileoverlay-89 { background-position: 0% -2000%; }
+.tileoverlay.tileoverlay-7921 { background-position: -100% -2000%; }
+.tileoverlay.tileoverlay-97 { background-position: 0% -2100%; }
+.tileoverlay.tileoverlay-9409 { background-position: -100% -2100%; }
+.tileoverlay.tileoverlay-101 { background-position: 0% -2200%; }
+.tileoverlay.tileoverlay-10201 { background-position: -100% -2200%; }
+.tileoverlay.tileoverlay-103 { background-position: 0% -2300%; }
+.tileoverlay.tileoverlay-10609 { background-position: -100% -2300%; }
+.tileoverlay.tileoverlay-107 { background-position: 0% -2400%; }
+.tileoverlay.tileoverlay-11449 { background-position: -100% -2400%; }
+.tileoverlay.tileoverlay-109 { background-position: 0% -2500%; }
+.tileoverlay.tileoverlay-11881 { background-position: -100% -2500%; }
+.tileoverlay.tileoverlay-113 { background-position: 0% -2600%; }
+.tileoverlay.tileoverlay-12769 { background-position: -100% -2600%; }
+.tileoverlay.tileoverlay-127 { background-position: 0% -2700%; }
+.tileoverlay.tileoverlay-16129 { background-position: -100% -2700%; }
+.tileoverlay.tileoverlay-131 { background-position: 0% -2800%; }
+.tileoverlay.tileoverlay-17161 { background-position: -100% -2800%; }
+.tileoverlay.tileoverlay-137 { background-position: 0% -2900%; }
+.tileoverlay.tileoverlay-18769 { background-position: -100% -2900%; }
+.tileoverlay.tileoverlay-139 { background-position: 0% -3000%; }
+.tileoverlay.tileoverlay-19321 { background-position: -100% -3000%; }
+.tileoverlay.tileoverlay-149 { background-position: 0% -3100%; }
+.tileoverlay.tileoverlay-22201 { background-position: -100% -3100%; }
+.tileoverlay.tileoverlay-151 { background-position: 0% -3200%; }
+.tileoverlay.tileoverlay-22801 { background-position: -100% -3200%; }
+.tileoverlay.tileoverlay-157 { background-position: 0% -3300%; }
+.tileoverlay.tileoverlay-24649 { background-position: -100% -3300%; }
+.tileoverlay.tileoverlay-163 { background-position: 0% -3400%; }
+.tileoverlay.tileoverlay-26569 { background-position: -100% -3400%; }
+.tileoverlay.tileoverlay-167 { background-position: 0% -3500%; }
+.tileoverlay.tileoverlay-27889 { background-position: -100% -3500%; }
+.tileoverlay.tileoverlay-173 { background-position: 0% -3600%; }
+.tileoverlay.tileoverlay-29929 { background-position: -100% -3600%; }
+.tileoverlay.tileoverlay-179 { background-position: 0% -3700%; }
+.tileoverlay.tileoverlay-32041 { background-position: -100% -3700%; }
+.tileoverlay.tileoverlay-181 { background-position: 0% -3800%; }
+.tileoverlay.tileoverlay-32761 { background-position: -100% -3800%; }
+.tileoverlay.tileoverlay-191 { background-position: 0% -3900%; }
+.tileoverlay.tileoverlay-36481 { background-position: -100% -3900%; }
+.tileoverlay.tileoverlay-193 { background-position: 0% -4000%; }
+.tileoverlay.tileoverlay-37249 { background-position: -100% -4000%; }
+.tileoverlay.tileoverlay-197 { background-position: 0% -4100%; }
+.tileoverlay.tileoverlay-38809 { background-position: -100% -4100%; }
+.tileoverlay.tileoverlay-199 { background-position: 0% -4200%; }
+.tileoverlay.tileoverlay-39601 { background-position: -100% -4200%; }
+.tileoverlay.tileoverlay-211 { background-position: 0% -4300%; }
+.tileoverlay.tileoverlay-44521 { background-position: -100% -4300%; }
+.tileoverlay.tileoverlay-223 { background-position: 0% -4400%; }
+.tileoverlay.tileoverlay-49729 { background-position: -100% -4400%; }
+.tileoverlay.tileoverlay-227 { background-position: 0% -4500%; }
+.tileoverlay.tileoverlay-51529 { background-position: -100% -4500%; }
+.tileoverlay.tileoverlay-229 { background-position: 0% -4600%; }
+.tileoverlay.tileoverlay-52441 { background-position: -100% -4600%; }
+.tileoverlay.tileoverlay-233 { background-position: 0% -4700%; }
+.tileoverlay.tileoverlay-54289 { background-position: -100% -4700%; }
+.tileoverlay.tileoverlay-239 { background-position: 0% -4800%; }
+.tileoverlay.tileoverlay-57121 { background-position: -100% -4800%; }
+.tileoverlay.tileoverlay-241 { background-position: 0% -4900%; }
+.tileoverlay.tileoverlay-58081 { background-position: -100% -4900%; }
+.tileoverlay.tileoverlay-251 { background-position: 0% -5000%; }
+.tileoverlay.tileoverlay-63001 { background-position: -100% -5000%; }
+.tileoverlay.tileoverlay-257 { background-position: 0% -5100%; }
+.tileoverlay.tileoverlay-66049 { background-position: -100% -5100%; }
+.tileoverlay.tileoverlay-263 { background-position: 0% -5200%; }
+.tileoverlay.tileoverlay-69169 { background-position: -100% -5200%; }
+.tileoverlay.tileoverlay-269 { background-position: 0% -5300%; }
+.tileoverlay.tileoverlay-72361 { background-position: -100% -5300%; }
+.tileoverlay.tileoverlay-271 { background-position: 0% -5400%; }
+.tileoverlay.tileoverlay-73441 { background-position: -100% -5400%; }
+.tileoverlay.tileoverlay-277 { background-position: 0% -5500%; }
+.tileoverlay.tileoverlay-76729 { background-position: -100% -5500%; }
+.tileoverlay.tileoverlay-281 { background-position: 0% -5600%; }
+.tileoverlay.tileoverlay-78961 { background-position: -100% -5600%; }
+.tileoverlay.tileoverlay-283 { background-position: 0% -5700%; }
+.tileoverlay.tileoverlay-80089 { background-position: -100% -5700%; }
+.tileoverlay.tileoverlay-293 { background-position: 0% -5800%; }
+.tileoverlay.tileoverlay-85849 { background-position: -100% -5800%; }
+.tileoverlay.tileoverlay-307 { background-position: 0% -5900%; }
+.tileoverlay.tileoverlay-94249 { background-position: -100% -5900%; }
+.tileoverlay.tileoverlay-311 { background-position: 0% -6000%; }
+.tileoverlay.tileoverlay-96721 { background-position: -100% -6000%; }
+.tileoverlay.tileoverlay-313 { background-position: 0% -6100%; }
+.tileoverlay.tileoverlay-97969 { background-position: -100% -6100%; }
+.tileoverlay.tileoverlay-317 { background-position: 0% -6200%; }
+.tileoverlay.tileoverlay-100489 { background-position: -100% -6200%; }
+.tileoverlay.tileoverlay-331 { background-position: 0% -6300%; }
+.tileoverlay.tileoverlay-109561 { background-position: -100% -6300%; }
+.tileoverlay.tileoverlay-337 { background-position: 0% -6400%; }
+.tileoverlay.tileoverlay-113569 { background-position: -100% -6400%; }
+.tileoverlay.tileoverlay-347 { background-position: 0% -6500%; }
+.tileoverlay.tileoverlay-120409 { background-position: -100% -6500%; }
+.tileoverlay.tileoverlay-349 { background-position: 0% -6600%; }
+.tileoverlay.tileoverlay-121801 { background-position: -100% -6600%; }
+.tileoverlay.tileoverlay-353 { background-position: 0% -6700%; }
+.tileoverlay.tileoverlay-124609 { background-position: -100% -6700%; }
+.tileoverlay.tileoverlay-359 { background-position: 0% -6800%; }
+.tileoverlay.tileoverlay-128881 { background-position: -100% -6800%; }
+.tileoverlay.tileoverlay-367 { background-position: 0% -6900%; }
+.tileoverlay.tileoverlay-134689 { background-position: -100% -6900%; }
 
 .tile.minitile, .tile.minitile .tilenumber, .tile.minitile .tileoverlay {
   width: 43px; 
