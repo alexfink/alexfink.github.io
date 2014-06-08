@@ -1,0 +1,9 @@
+#!/bin/bash
+cp 7.png c0r00.png
+cp 49.png c1r00.png
+cp 11.png c0r01.png
+cp 121.png c1r01.png
+convert c0r*.png -append c0.png
+convert c1r*.png -append c1.png
+convert c0.png c1.png +append sprite.png
+rm c*.png

@@ -539,140 +539,141 @@ hr {
   left: 0;
   top: 0;
   z-index: 11;
-  background-size: cover; 
+  background-image: url('http://alexfink.github.io/dive/tileoverlays/sprite.png'); 
+  background-size: 200% auto;
 }
 .tileoverlay.tileoverlay-7    { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/7.png'); }
+  background-position: 0% 0%; }
 .tileoverlay.tileoverlay-49   { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/49.png'); }
-.tileoverlay.tileoverlay-11   { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/11.png'); }
+  background-position: -100% 0%; }
+.tileoverlay.tileoverlay-11    { 
+  background-position: 0% -100%; }
 .tileoverlay.tileoverlay-121  { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/121.png'); }
+  background-position: -100% -100%; }
 .tileoverlay.tileoverlay-13 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/13.png'); }
+  background-position: 0% -200%; }
 .tileoverlay.tileoverlay-169 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/169.png'); }
+  background-position: -100% -200%; }
 .tileoverlay.tileoverlay-17 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/17.png'); }
+  background-position: 0% -300%; }
 .tileoverlay.tileoverlay-289 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/289.png'); }
+  background-position: -100% -300%; }
 .tileoverlay.tileoverlay-19 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/19.png'); }
+  background-position: 0% -400%; }
 .tileoverlay.tileoverlay-361 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/361.png'); }
+  background-position: -100% -400%; }
 .tileoverlay.tileoverlay-23 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/23.png'); }
+  background-position: 0% -500%; }
 .tileoverlay.tileoverlay-529 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/529.png'); }
+  background-position: -100% -500%; }
 .tileoverlay.tileoverlay-29 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/29.png'); }
+  background-position: 0% -600%; }
 .tileoverlay.tileoverlay-841 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/841.png'); }
+  background-position: -100% -600%; }
 .tileoverlay.tileoverlay-31 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/31.png'); }
+  background-position: 0% -700%; }
 .tileoverlay.tileoverlay-961 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/961.png'); }
+  background-position: -100% -700%; }
 .tileoverlay.tileoverlay-37 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/37.png'); }
+  background-position: 0% -800%; }
 .tileoverlay.tileoverlay-1369 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/1369.png'); }
+  background-position: -100% -800%; }
 .tileoverlay.tileoverlay-41 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/41.png'); }
+  background-position: 0% -900%; }
 .tileoverlay.tileoverlay-1681 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/1681.png'); }
+  background-position: -100% -900%; }
 .tileoverlay.tileoverlay-43 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/43.png'); }
+  background-position: 0% -1000%; }
 .tileoverlay.tileoverlay-1849 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/1849.png'); }
+  background-position: -100% -1000%; }
 .tileoverlay.tileoverlay-47 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/47.png'); }
+  background-position: 0% -1100%; }
 .tileoverlay.tileoverlay-2209 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/2209.png'); }
+  background-position: -100% -1100%; }
 .tileoverlay.tileoverlay-53 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/53.png'); }
+  background-position: 0% -1200%; }
 .tileoverlay.tileoverlay-2809 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/2809.png'); }
+  background-position: -100% -1200%; }
 .tileoverlay.tileoverlay-59 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/59.png'); }
+  background-position: 0% -1300%; }
 .tileoverlay.tileoverlay-3481 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/3481.png'); }
+  background-position: -100% -1300%; }
 .tileoverlay.tileoverlay-61 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/61.png'); }
+  background-position: 0% -1400%; }
 .tileoverlay.tileoverlay-3721 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/3721.png'); }
+  background-position: -100% -1400%; }
 .tileoverlay.tileoverlay-67 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/67.png'); }
+  background-position: 0% -1500%; }
 .tileoverlay.tileoverlay-4489 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/4489.png'); }
+  background-position: -100% -1500%; }
 .tileoverlay.tileoverlay-71 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/71.png'); }
+  background-position: 0% -1600%; }
 .tileoverlay.tileoverlay-5041 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/5041.png'); }
+  background-position: -100% -1600%; }
 .tileoverlay.tileoverlay-73 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/73.png'); }
+  background-position: 0% -1700%; }
 .tileoverlay.tileoverlay-5329 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/5329.png'); }
+  background-position: -100% -1700%; }
 .tileoverlay.tileoverlay-79 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/79.png'); }
+  background-position: 0% -1800%; }
 .tileoverlay.tileoverlay-6241 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/6241.png'); }
+  background-position: -100% -1800%; }
 .tileoverlay.tileoverlay-83 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/83.png'); }
+  background-position: 0% -1900%; }
 .tileoverlay.tileoverlay-6889 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/6889.png'); }
+  background-position: -100% -1900%; }
 .tileoverlay.tileoverlay-89 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/89.png'); }
+  background-position: 0% -2000%; }
 .tileoverlay.tileoverlay-7921 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/7921.png'); }
+  background-position: -100% -2000%; }
 .tileoverlay.tileoverlay-97 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/97.png'); }
+  background-position: 0% -2100%; }
 .tileoverlay.tileoverlay-9409 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/9409.png'); }
+  background-position: -100% -2100%; }
 .tileoverlay.tileoverlay-101 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/101.png'); }
+  background-position: 0% -2200%; }
 .tileoverlay.tileoverlay-10201 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/10201.png'); }
+  background-position: -100% -2200%; }
 .tileoverlay.tileoverlay-103 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/103.png'); }
+  background-position: 0% -2300%; }
 .tileoverlay.tileoverlay-10609 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/10609.png'); }
+  background-position: -100% -2300%; }
 .tileoverlay.tileoverlay-107 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/107.png'); }
+  background-position: 0% -2400%; }
 .tileoverlay.tileoverlay-11449 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/11449.png'); }
+  background-position: -100% -2400%; }
 .tileoverlay.tileoverlay-109 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/109.png'); }
+  background-position: 0% -2500%; }
 .tileoverlay.tileoverlay-11881 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/11881.png'); }
+  background-position: -100% -2500%; }
 .tileoverlay.tileoverlay-113 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/113.png'); }
+  background-position: 0% -2600%; }
 .tileoverlay.tileoverlay-12769 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/12769.png'); }
+  background-position: -100% -2600%; }
 .tileoverlay.tileoverlay-127 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/127.png'); }
+  background-position: 0% -2700%; }
 .tileoverlay.tileoverlay-16129 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/16129.png'); }
+  background-position: -100% -2700%; }
 .tileoverlay.tileoverlay-131 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/131.png'); }
+  background-position: 0% -2800%; }
 .tileoverlay.tileoverlay-17161 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/17161.png'); }
+  background-position: -100% -2800%; }
 .tileoverlay.tileoverlay-137 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/137.png'); }
+  background-position: 0% -2900%; }
 .tileoverlay.tileoverlay-18769 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/18769.png'); }
+  background-position: -100% -2900%; }
 .tileoverlay.tileoverlay-139 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/139.png'); }
+  background-position: 0% -3000%; }
 .tileoverlay.tileoverlay-19321 { 
-  background-image: url('http://alexfink.github.io/dive/tileoverlays/19321.png'); }
+  background-position: -100% -3000%; }
 
 .tile.minitile, .tile.minitile .tilenumber, .tile.minitile .tileoverlay {
-  width: 42.5px; 
-  height: 42.5px; 
+  width: 43px; 
+  height: 43px; 
   display: inline-block; }
 .tile.minitile {  
   position: relative; 
-  line-height: 52.5px;
+  line-height: 53px;
   margin: 3px; 
 }
 .tile.minitile .tilenumber {

@@ -88,7 +88,7 @@ for p in primes:
   p_index += 1
   colour, sevens, residue = base_colour((p+1)/2)
   frequency = math.sqrt(p)*2/3.0
-  attenuation = 3/2.0/math.sqrt(p)
+  attenuation = 3/2.0/math.sqrt(p) # TODO: boost lighter primes for which p+1 is smooth
   direction = math.pi*((math.sqrt(5)+1)/2*p_index + 1.0/4) # in which the bright stripes are
 
   if residue > 1:
@@ -114,11 +114,10 @@ for p in primes:
     supersupercolour = None
 
   im = wavy(colour, direction, frequency, attenuation, sevens > 0, supercolour, superfrequency, superattenuation, supersupercolour) 
-  print (".tileoverlay.tileoverlay-%d { \n  background-image: url('http://alexfink.github.io/dive/tileoverlays/%d.png'); }") % (p, p)
-#  im.save("c0r%d.png" % p_index)
-  im.save("%d.png" % p)
+  print (".tileoverlay.tileoverlay-%d { \n  background-position: 0%% %d%%; }") % (p, (-100*p_index))
+  im.save("c0r%02d.png" % p_index)
   im = wavy(colour, direction, frequency, 2*attenuation, sevens > 0, supercolour, superfrequency, superattenuation, supersupercolour) 
-  print (".tileoverlay.tileoverlay-%d { \n  background-image: url('http://alexfink.github.io/dive/tileoverlays/%d.png'); }") % (p*p, p*p)
-#  im.save("c1r%d.png" % p_index)
-  im.save("%d.png" % (p*p))
+  print (".tileoverlay.tileoverlay-%d { \n  background-position: -100%% %d%%; }") % (p*p, (-100*p_index))
+  im.save("c1r%02d.png" % p_index)
+
 
