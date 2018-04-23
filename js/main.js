@@ -174,28 +174,20 @@
 			that.draw();
 		};
 
-		/**
-		* Randomly scatter mines on the field
+    /**
+		* Place the mines according to a PBoard sample
 		*/
-		that.addMines = function (numberOfMines, mouseX, mouseY) {
-			var i,
-				x,
-				y;
-
-			x = Math.floor(Math.random() * that.width);
-			y = Math.floor(Math.random() * that.height);
-			for (i = numberOfMines - 1; i >= 0; i -= 1) {
-				// check if already mine
-				while ((that.tiles[x][y].isMine)
-						|| ((Math.abs(x - mouseX) <= 1) && (Math.abs(y - mouseY) <= 1))) {
-					x = Math.floor(Math.random() * that.width);
-					y = Math.floor(Math.random() * that.height);
+    that.mineFromSample = function (tileSample) {
+			for (var i = that.width - 1; i >= 0; i -= 1) {
+				for (var j = that.height - 1; j >= 0; j -= 1) {
+					that.tiles[i][j].isMine = false;
 				}
-				that.tiles[x][y].isMine = true;
 			}
-
-			that.setAdjacentMines();
-		};
+      for (var coords of tileSample)
+        that.tiles[coords[0]][coords[1]].isMine = true;
+ 
+      that.setAdjacentMines();
+    }
 
 		/**
 		* Compute the number of adjacent mines on the whole board
@@ -337,6 +329,324 @@
 
 
 
+
+  var factorials = [1,1,2,6,24,120,720,5040,40320,362880,3628800,39916800,479001600,6227020800,87178291200,1307674368000,20922789888000,355687428096000,6402373705728000,121645100408832000,2432902008176640000,51090942171709440000];
+
+  function factorial(n) {
+    var z;
+    if (n < factorials.length)
+      return factorials[n];
+    else {
+      z = n+1;
+      //Gerg\H{o} Nemes' version of Stirling's approximation.  eight sig figs is fine
+      return Math.sqrt(2*Math.PI/z)*Math.pow((z+1/(12*z-0.1/z))/Math.E, z);
+    }
+  }
+
+  /**
+  * Return a list of n of the items from ll.
+  */
+  function randomSublist(ll, n) {
+    var l = ll.slice(),
+        sublist = [];
+    for (var i = n - 1; i >= 0; i -= 1)
+      sublist.push(l.splice(Math.floor(Math.random() * l.length), 1)[0]);
+    return sublist;
+  }
+ 
+	/**
+  * A fact known about a set of cells on the board
+  */
+	function CellConstraint(cells, n) {
+var that = this;
+that.cells = new Set(cells); // expecting a Set
+that.n = n;
+
+that.equals = function (constraint) {
+  if (constraint.n != that.n)
+    return false;
+  for (var e of that.cells)
+    if (!constraint.cells.has(e))
+      return false;
+  for (var e of constraint.cells)
+    if (!that.cells.has(e))
+      return false;
+  return true;
+};
+
+that.isSubset = function (constraint) {
+  for (var e of that.cells)
+    if (!constraint.cells.has(e))
+      return false;
+  return true;
+};
+
+/**
+* Not guaranteed to be meaningful when constraint is not a subset of that.
+*/
+that.minus = function (constraint) {
+  var difference = CellConstraint(that.cells, that.n - constraint.n);
+  for (var e of constraint.cells)
+    difference.cells.delete(e);
+  return difference;
+};
+
+/**
+* The set of common cells (not a constraint).
+*/
+that.intersection = function (constraint) {
+  var s = new Set();
+  for (var e of that.cells)
+    if (constraint.cells.has(e))
+      s.add(e);
+  return s;
+};
+  }
+
+	/**
+	* Logicky board object, which does all the probabilistic reasoning
+	*/
+	function PBoard(width, height, nMines) {
+var that = this;
+that.width = width;
+that.height = height;
+that.nCells = width * height;
+that.nMines = nMines;
+that.constraints = [];
+
+that.deepCopy = function () {
+  var board = new PBoard(that.width, that.height, that.nMines);
+  for (var constraint of that.constraints)
+    board.constraints.push(new CellConstraint(constraint.cells, constraint.n));
+  return board;
+}
+
+/**
+* Convert cell coordinates (x, y) to a single integer representing the cell.
+*/
+that.coordsToID = function (x, y) {
+  return y * that.width + x;
+};
+
+/**
+* Convert single integer to cell coordinates.
+*/
+that.IDTOCoords = function (i) {
+  return [i % that.width, Math.floor(i / that.width)];
+}
+
+/**
+* Delete a constraint given its index,
+* and update housekeeping information.
+*/
+that.deleteConstraint = function (j) {
+  that.constraints.splice(j, 1);
+};
+
+/**
+* Start the game with an exposure at (x, y).
+*/
+that.startGame = function(x, y) {
+  that.constraints = [];
+  for (var i = x-1; i <= x+1; i++) {
+    if (i < 0) continue;
+    if (i > that.width - 1) break;
+    for (var j = y-1; j <= y+1; j++) {
+      if (j < 0) continue;
+      if (j > that.height - 1) break;
+
+      that.constraints.push(new CellConstraint([that.coordsToID(i, j)], 0));
+    }
+  }
+};
+
+/**
+* Return a set in which two constraints intersect nontrivially,
+* or null if there isn't any.
+* TODO: this is where we'll need heuristics if we have to compute approximately.
+*/
+that.findIntersection = function () {
+  var intersection;
+
+  for (var j = that.constraints.length - 1; j >= 0; j -= 1)
+    for (var i = j - 1; i >= 0; i -= 1) {
+      intersection = that.constraints[j].intersection(that.constraints[i]);
+      if (intersection.size > 0 &&
+          intersection.size < that.constraints[j].cells.size &&
+          intersection.size < that.constraints[i].cells.size)
+        return intersection;
+    }
+  return null;
+};
+
+/**
+* Set of cells in no constraint.
+*/
+that.cellsInNoConstraint = function () {
+  var s = new Set([...Array(that.nCells).keys()]);
+  for (var constraint of that.constraints)
+    for (var i of constraint.cells)
+      s.delete(i);
+  return s;
+};
+
+/**
+* Count assignments of mines compatible with this board state.
+* If sample is true, also return a uniform random one.
+* If inner is true, assume the board state has already been simplified.
+*/
+that.count = function (sample, inner) {
+  var intersection,
+      board,
+      total = 0,
+      caseCount,
+      lastSample;
+
+  if (!inner)
+    that.simplify();
+  intersection = that.findIntersection();
+  console.log("intersection", intersection);
+  if (intersection === null) {
+    return that.countBaseCase(sample);
+  } else {
+    for (var n = intersection.size; n >= 0; n -= 1) {
+      board = that.deepCopy();
+      board.simplify([new CellConstraint(intersection, n)]);
+      caseCount = board.count(sample, true);
+      total += caseCount[0];
+      if (sample && Math.random() < caseCount[0] / total)
+        lastSample = caseCount[1];
+    }
+  }
+  if (sample)
+    return [total, lastSample];
+  else
+    return [total];
+};
+
+/**
+* This is the case in which no constraints intersect,
+* so they can be counted and sampled indepedently.
+*/
+that.countBaseCase = function (sample) {
+  var cellsLeft = that.nCells,
+      minesLeft = that.nMines,
+      prod = 1,
+      mines = [],
+      n, r;
+  for (var constraint of that.constraints) {
+    cellsLeft -= n = constraint.cells.size;
+    minesLeft -= r = constraint.n; // yeah I know
+    prod *= factorial(n) / factorial(r) / factorial(n-r);
+    if (sample)
+      mines = mines.concat(randomSublist([...constraint.cells], r));
+  }
+  prod *= factorial(cellsLeft) / factorial(minesLeft) / factorial(cellsLeft-minesLeft);
+  if (sample) {
+    mines = mines.concat(randomSublist([...that.cellsInNoConstraint()], minesLeft));
+    return [prod, mines];
+  } else
+    return [prod];
+};
+
+/**
+* Add the newConstraints, then simplify constraints using all the strategies.
+* Omit newConstraints to simplify with respect to everything.
+* Return false iff a contradiction was found.
+*/
+that.simplify = function (newConstraints) {
+  var active; // indices of constraints we need to do something with
+  if (newConstraints === undefined) {
+    active = [...Array(that.constraints.length).keys()];
+  } else {
+    active = [];
+    for (var constraint of newConstraints) {
+      active.push(that.constraints.length);
+      that.removeSubsetsAndAdd(constraint);
+    }
+  }
+
+  while (active.length) {
+    console.log("before crumble", that.constraints, active);
+    active = that.crumbleUniques(active);
+    console.log("before cut out", that.constraints, active);
+    if (active === null)
+      return false;
+    active = that.cutOutSubsets(active);
+  }
+  return true;
+};
+
+/**
+* The opposite number to cutOutSubsets, below.
+*/
+that.removeSubsetsAndAdd = function (constraint) {
+  for (var i = that.constraints.length - 1; i >= 0; i -= 1) {
+    if (that.constraints[i].isSubset(constraint))
+      constraint = constraint.minus(that.constraints[i]);
+  }
+  that.constraints.push(constraint);
+};
+
+/**
+* Simplify constraints of which the js[0]th or js[1]th or ... is a proper subset.
+* Return the list of indices so simplified.
+*/
+that.cutOutSubsets = function (js) {
+  var actedOn = [];
+  for (var j of js) {
+    for (var i = that.constraints.length - 1; i >= 0; i -= 1) {
+      if (i == j)
+        continue;
+      if (that.constraints[j].isSubset(that.constraints[i])) {
+        that.constraints[i] = that.constraints[i].minus(that.constraints[j]);
+        actedOn.push[i];
+      }
+    }
+  }
+  return actedOn;
+};
+
+/**
+* Look at the js[0]th, js[1]th, ... constraints, 
+* to see whether they have at most one solution.
+* Return null if any has none.
+* Otherwise return the list of indices of constraints which these were broken into.
+* Note that this process kills constraints of size 0.
+*/
+that.crumbleUniques = function(js) {
+  var crumbs = [],
+      lastJ = -1, // we don't want to do one twice
+      newCrumbsStart = that.constraints.length, // everything appended is a crumb
+      newCrumbs,
+      c;
+
+  js.sort((a,b) => b-a);
+  for (var j of js) {
+    if (j == lastJ)
+      continue;
+    lastJ = j;
+
+    c = that.constraints[j];
+    if (c.n > c.cells.size || c.n < 0)
+      return null;
+    if (c.n == c.cells.size || c.n == 0) {
+      for (var i of c.cells)
+        that.constraints.push(new CellConstraint([i], c.n?1:0));
+      that.deleteConstraint(j);
+      newCrumbsStart -= 1;
+    } else
+      crumbs.push[j];
+  }
+ 
+  newCrumbs = new Array(that.constraints.length - newCrumbsStart);
+  for (var i = that.constraints.length - 1; i >= newCrumbsStart; i -= 1)
+    newCrumbs[i - newCrumbsStart] = i;
+  return newCrumbs.concat(crumbs);
+};
+  }
+
+ 
 	/**
 	* Main game object
 	*/
@@ -345,11 +655,12 @@
 
 		that.width = width;
 		that.height = height;
+    that.numberOfMines = numberOfMines;
 		that.guiHeight = 25;
 		that.tileSize = 25;
 		that.board = new Board(that.width, that.height, that.tileSize);
+    that.pBoard = new PBoard(that.width, that.height, numberOfMines);
 		that.mines = [];
-		that.numberOfMines = numberOfMines;
 		that.isFirstClick = true;
 		that.timer = {};
 		that.time = 0;
@@ -402,15 +713,21 @@
     * Expose the tile at (x, y).
     */
     that.expose = function(x, y) {
-      var clickedTile = that.board.tiles[x][y];
+      var clickedTile = that.board.tiles[x][y],
+          count;
      
       if (!clickedTile.isFlagged) {
         // on first click, start timer and initialize
         // the mines for the player not to click on a mine
         if (that.isFirstClick) {
-          that.board.addMines(that.numberOfMines, x, y);
+          that.pBoard.startGame(x, y);
+          count = that.pBoard.count(true);
+          that.board.mineFromSample(count[1].map(i => that.pBoard.IDTOCoords(i)));
+ 
           that.startTimer();
           that.isFirstClick = false;
+
+          //that.gameOver(false);
         }
 
         if (clickedTile.isMine) {
