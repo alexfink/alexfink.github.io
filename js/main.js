@@ -39,8 +39,9 @@
 		that.isHidden = true;
 		that.isMine = false;
 		that.isFlagged = false;
-		that.numberOfAdjacentMines = 0;
+		that.numberOfAdjacentMines = -1; // dirty when uninitialised
 		that.wasSearched = false;
+    that.wasPBoarded = false; // has this tile's state been put in the pBoard?
 
     /**
 		* Toggle flag
@@ -98,7 +99,10 @@
 
 
 	/**
-	* Front-endy board object, where tiles are drawn
+	* Board object where tiles are drawn.
+  * Mostly front-endish, although it does keep track of
+  * one crucial piece of game-state, that being
+  * which tiles are exposed.
 	*/
 	function Board(width, height, tileSize) {
 		var that = this;
@@ -175,6 +179,15 @@
 		};
 
     /**
+		* Place and unhide one mine
+		*/
+    that.mineOnly = function(x, y) {
+      that.tiles[x][y].isMine = true;
+      that.tiles[x][y].isHidden = false;
+      that.tiles[x][y].draw(false);
+    };
+
+    /**
 		* Place the mines according to a PBoard sample
 		*/
     that.mineFromSample = function (tileSample) {
@@ -228,6 +241,30 @@
 			}
 
 			that.tiles[x][y].numberOfAdjacentMines = count;
+		};
+
+		/**
+		* Return the list of adjacent cells of tile x, y
+		*/
+		that.adjacentCoords = function (x, y) {
+			var i, j,
+				width = that.tiles.length,
+				height = that.tiles[0].length,
+				list = [];
+
+			for (i = -1; i <= 1; i += 1) {
+				for (j = -1; j <= 1; j += 1) {
+					// inside canvas ?
+					if ((x + i >= 0) && (x + i < width)
+							&& (y + j >= 0)
+							&& (y + j < height)) {
+						// is a mine ?
+            list.push([x + i, y + j]);
+					}
+				}
+			}
+
+			return list;
 		};
 
 		/**
@@ -330,16 +367,25 @@
 
 
 
-  var factorials = [1,1,2,6,24,120,720,5040,40320,362880,3628800,39916800,479001600,6227020800,87178291200,1307674368000,20922789888000,355687428096000,6402373705728000,121645100408832000,2432902008176640000,51090942171709440000];
+  function logSumExp(a, b) {
+    if (a == -Infinity && b == -Infinity)
+      return -Infinity;
+    else if (a > b)
+      return a + Math.log1p(Math.exp(b - a));
+    else
+      return b + Math.log1p(Math.exp(a - b));
+  }
 
-  function factorial(n) {
+  var logfactorials = [0, 0, 0.6931471805599453, 1.791759469228055, 3.1780538303479458, 4.787491742782046, 6.579251212010101, 8.525161361065415, 10.60460290274525, 12.801827480081469, 15.104412573075516, 17.502307845873887, 19.987214495661885, 22.552163853123425, 25.19122118273868, 27.89927138384089, 30.671860106080672, 33.50507345013689, 36.39544520803305, 39.339884187199495, 42.335616460753485, 45.38013889847691];
+
+  function logfactorial(n) {
     var z;
-    if (n < factorials.length)
-      return factorials[n];
+    if (n < logfactorials.length)
+      return logfactorials[n];
     else {
       z = n+1;
       //Gerg\H{o} Nemes' version of Stirling's approximation.  eight sig figs is fine
-      return Math.sqrt(2*Math.PI/z)*Math.pow((z+1/(12*z-0.1/z))/Math.E, z);
+      return Math.log(Math.sqrt(2*Math.PI/z))+z*(Math.log((z+1/(12*z-0.1/z)))-1);
     }
   }
 
@@ -385,7 +431,7 @@ that.isSubset = function (constraint) {
 * Not guaranteed to be meaningful when constraint is not a subset of that.
 */
 that.minus = function (constraint) {
-  var difference = CellConstraint(that.cells, that.n - constraint.n);
+  var difference = new CellConstraint(that.cells, that.n - constraint.n);
   for (var e of constraint.cells)
     difference.cells.delete(e);
   return difference;
@@ -419,7 +465,7 @@ that.deepCopy = function () {
   for (var constraint of that.constraints)
     board.constraints.push(new CellConstraint(constraint.cells, constraint.n));
   return board;
-}
+};
 
 /**
 * Convert cell coordinates (x, y) to a single integer representing the cell.
@@ -433,11 +479,12 @@ that.coordsToID = function (x, y) {
 */
 that.IDTOCoords = function (i) {
   return [i % that.width, Math.floor(i / that.width)];
-}
+};
 
 /**
 * Delete a constraint given its index,
 * and update housekeeping information.
+* (There's no housekeeping information at the moment.)
 */
 that.deleteConstraint = function (j) {
   that.constraints.splice(j, 1);
@@ -468,14 +515,19 @@ that.startGame = function(x, y) {
 that.findIntersection = function () {
   var intersection;
 
-  for (var j = that.constraints.length - 1; j >= 0; j -= 1)
+  for (var j = that.constraints.length - 1; j >= 0; j -= 1) {
+    if (that.constraints[j].cells.size <= 1)
+      continue;
     for (var i = j - 1; i >= 0; i -= 1) {
+      if (that.constraints[i].cells.size <= 1)
+        continue;
       intersection = that.constraints[j].intersection(that.constraints[i]);
       if (intersection.size > 0 &&
           intersection.size < that.constraints[j].cells.size &&
           intersection.size < that.constraints[i].cells.size)
         return intersection;
     }
+  }
   return null;
 };
 
@@ -491,37 +543,39 @@ that.cellsInNoConstraint = function () {
 };
 
 /**
-* Count assignments of mines compatible with this board state.
+* Count assignments of mines compatible with this board state;
+* return the log of the count.
 * If sample is true, also return a uniform random one.
 * If inner is true, assume the board state has already been simplified.
 */
 that.count = function (sample, inner) {
   var intersection,
       board,
-      total = 0,
+      logtotal = -Infinity,
       caseCount,
-      lastSample;
+      lastSample = null;
 
   if (!inner)
-    that.simplify();
+    if (!that.simplify())
+      return [-Infinity, null];
   intersection = that.findIntersection();
-  console.log("intersection", intersection);
   if (intersection === null) {
     return that.countBaseCase(sample);
   } else {
     for (var n = intersection.size; n >= 0; n -= 1) {
       board = that.deepCopy();
-      board.simplify([new CellConstraint(intersection, n)]);
-      caseCount = board.count(sample, true);
-      total += caseCount[0];
-      if (sample && Math.random() < caseCount[0] / total)
-        lastSample = caseCount[1];
+      if (board.simplify([new CellConstraint(intersection, n)])) {
+        caseCount = board.count(sample, true);
+        logtotal = logSumExp(logtotal, caseCount[0]);
+        if (sample && logtotal > -Infinity && Math.random() < Math.exp(caseCount[0] - logtotal))
+          lastSample = caseCount[1];
+      }
     }
   }
   if (sample)
-    return [total, lastSample];
+    return [logtotal, lastSample];
   else
-    return [total];
+    return [logtotal];
 };
 
 /**
@@ -531,22 +585,43 @@ that.count = function (sample, inner) {
 that.countBaseCase = function (sample) {
   var cellsLeft = that.nCells,
       minesLeft = that.nMines,
-      prod = 1,
+      logprod = 0,
       mines = [],
       n, r;
   for (var constraint of that.constraints) {
     cellsLeft -= n = constraint.cells.size;
     minesLeft -= r = constraint.n; // yeah I know
-    prod *= factorial(n) / factorial(r) / factorial(n-r);
+    logprod += logfactorial(n) - logfactorial(r) - logfactorial(n-r);
     if (sample)
       mines = mines.concat(randomSublist([...constraint.cells], r));
   }
-  prod *= factorial(cellsLeft) / factorial(minesLeft) / factorial(cellsLeft-minesLeft);
-  if (sample) {
-    mines = mines.concat(randomSublist([...that.cellsInNoConstraint()], minesLeft));
-    return [prod, mines];
+  if (minesLeft <= cellsLeft && minesLeft >= 0) {
+    logprod += logfactorial(cellsLeft) - logfactorial(minesLeft) - logfactorial(cellsLeft-minesLeft);
+    if (sample) {
+      mines = mines.concat(randomSublist([...that.cellsInNoConstraint()], minesLeft));
+      return [logprod, mines];
+    } else
+      return [logprod];
   } else
-    return [prod];
+    return [-Infinity, null];
+};
+
+/**
+* Add the constraints corresponding to the information revealed on the Board.
+*/
+that.recordConstraints = function(board) {
+  var newConstraints = [];
+  for (var i = board.width - 1; i >= 0; i -= 1) {
+    for (var j = board.height - 1; j >= 0; j -= 1) {
+      if (!board.tiles[i][j].isHidden && !board.tiles[i][j].wasPBoarded) {
+        board.tiles[i][j].wasPBoarded = true;
+        newConstraints.push(new CellConstraint([that.coordsToID(i, j)], 0));
+        newConstraints.push(new CellConstraint(board.adjacentCoords(i, j).map(c => that.coordsToID(...c)),
+                                               board.tiles[i][j].numberOfAdjacentMines));
+      }
+    }
+  }
+  that.simplify(newConstraints);
 };
 
 /**
@@ -567,9 +642,7 @@ that.simplify = function (newConstraints) {
   }
 
   while (active.length) {
-    console.log("before crumble", that.constraints, active);
     active = that.crumbleUniques(active);
-    console.log("before cut out", that.constraints, active);
     if (active === null)
       return false;
     active = that.cutOutSubsets(active);
@@ -595,12 +668,14 @@ that.removeSubsetsAndAdd = function (constraint) {
 that.cutOutSubsets = function (js) {
   var actedOn = [];
   for (var j of js) {
+    if (that.constraints[j].cells.size == 0)
+      continue;
     for (var i = that.constraints.length - 1; i >= 0; i -= 1) {
       if (i == j)
         continue;
       if (that.constraints[j].isSubset(that.constraints[i])) {
         that.constraints[i] = that.constraints[i].minus(that.constraints[j]);
-        actedOn.push[i];
+        actedOn.push(i);
       }
     }
   }
@@ -628,15 +703,18 @@ that.crumbleUniques = function(js) {
     lastJ = j;
 
     c = that.constraints[j];
-    if (c.n > c.cells.size || c.n < 0)
+    if (c.n > c.cells.size || c.n < 0) {
       return null;
-    if (c.n == c.cells.size || c.n == 0) {
+    }
+    if ((c.n == c.cells.size || c.n == 0) & c.cells.size != 1) {
       for (var i of c.cells)
         that.constraints.push(new CellConstraint([i], c.n?1:0));
       that.deleteConstraint(j);
+      crumbs = crumbs.map(i => {return i>j?i-1:i;});
       newCrumbsStart -= 1;
-    } else
-      crumbs.push[j];
+    } else {
+      crumbs.push(j);
+    }
   }
  
   newCrumbs = new Array(that.constraints.length - newCrumbsStart);
@@ -680,8 +758,11 @@ that.crumbleUniques = function(js) {
 				that.drawGUI('Game over!  (Score minus infinity.)  Click to restart.');
 			}
 
-			// reveal the mines
-			that.board.revealAll();
+			// Reveal the mines, if won.
+      //
+      // If lost, the mines are probably not in a determinate position.
+      if (won)
+        that.board.revealAll();
 
 			// on click, start new game
 			canvas.removeEventListener("mousedown", that.click, false);
@@ -714,26 +795,34 @@ that.crumbleUniques = function(js) {
     */
     that.expose = function(x, y) {
       var clickedTile = that.board.tiles[x][y],
-          count;
+          pBoardMine,
+          countSafe, countMine;
      
       if (!clickedTile.isFlagged) {
         // on first click, start timer and initialize
         // the mines for the player not to click on a mine
         if (that.isFirstClick) {
           that.pBoard.startGame(x, y);
-          count = that.pBoard.count(true);
-          that.board.mineFromSample(count[1].map(i => that.pBoard.IDTOCoords(i)));
  
           that.startTimer();
           that.isFirstClick = false;
-
-          //that.gameOver(false);
         }
 
-        if (clickedTile.isMine) {
+        pBoardMine = that.pBoard.deepCopy();
+        that.pBoard.constraints.push(new CellConstraint([that.pBoard.coordsToID(x, y)], 0));
+        countSafe = that.pBoard.count(true);
+        if (countSafe[0] == -Infinity) {
           // game lost
+          that.board.mineOnly(x, y);
           that.gameOver(false);
         } else {
+          pBoardMine.constraints.push(new CellConstraint([pBoardMine.coordsToID(x, y)], 1));
+          countMine = pBoardMine.count(false);
+          // TODO: display the score lost on this move somehow
+          that.score += countSafe[0] - logSumExp(countSafe[0], countMine[0]);
+          that.drawStatusLine();
+ 
+          that.board.mineFromSample(countSafe[1].map(i => that.pBoard.IDTOCoords(i)));
           that.board.reveal(x, y);
 
           if (that.board.numberOfHiddenTiles
@@ -741,6 +830,9 @@ that.crumbleUniques = function(js) {
             // game won
             that.gameOver(true);
           }
+ 
+          that.pBoard.recordConstraints(that.board);
+          //console.log("final constraints", that.pBoard.constraints.slice());
         }
       }
     };
