@@ -279,8 +279,8 @@
 							// add tiles to clear to array
 							// empty tile
 							if ((currentTile.numberOfAdjacentMines === 0)
-									// not the clicked nor diagonal
-									&& (Math.abs(i + j) === 1)
+									// not the clicked
+									&& (i !== 0 || j !== 0)
 									// not already searched
 									&& (!currentTile.wasSearched)) {
 								tilesToClear.push([x + i, y + j]);
