@@ -258,7 +258,6 @@
 					if ((x + i >= 0) && (x + i < width)
 							&& (y + j >= 0)
 							&& (y + j < height)) {
-						// is a mine ?
             list.push([x + i, y + j]);
 					}
 				}
@@ -796,7 +795,8 @@ that.crumbleUniques = function(js) {
     that.expose = function(x, y) {
       var clickedTile = that.board.tiles[x][y],
           pBoardMine,
-          countSafe, countMine;
+          countSafe, countMine,
+          adjacentCoords, nFlags, tile;
      
       if (!clickedTile.isFlagged) {
         // on first click, start timer and initialize
@@ -808,31 +808,49 @@ that.crumbleUniques = function(js) {
           that.isFirstClick = false;
         }
 
-        pBoardMine = that.pBoard.deepCopy();
-        that.pBoard.constraints.push(new CellConstraint([that.pBoard.coordsToID(x, y)], 0));
-        countSafe = that.pBoard.count(true);
-        if (countSafe[0] == -Infinity) {
-          // game lost
-          that.board.mineOnly(x, y);
-          that.gameOver(false);
-        } else {
-          pBoardMine.constraints.push(new CellConstraint([pBoardMine.coordsToID(x, y)], 1));
-          countMine = pBoardMine.count(false);
-          // TODO: display the score lost on this move somehow
-          that.score += countSafe[0] - logSumExp(countSafe[0], countMine[0]);
-          that.drawStatusLine();
- 
-          that.board.mineFromSample(countSafe[1].map(i => that.pBoard.IDTOCoords(i)));
-          that.board.reveal(x, y);
+        if (clickedTile.isHidden) {
+          pBoardMine = that.pBoard.deepCopy();
+          that.pBoard.constraints.push(new CellConstraint([that.pBoard.coordsToID(x, y)], 0));
+          countSafe = that.pBoard.count(true);
+          if (countSafe[0] == -Infinity) {
+            // game lost
+            that.board.mineOnly(x, y);
+            that.gameOver(false);
+          } else {
+            pBoardMine.constraints.push(new CellConstraint([pBoardMine.coordsToID(x, y)], 1));
+            countMine = pBoardMine.count(false);
+            // TODO: display the score lost on this move somehow
+            that.score += countSafe[0] - logSumExp(countSafe[0], countMine[0]);
+            that.drawStatusLine();
+   
+            that.board.mineFromSample(countSafe[1].map(i => that.pBoard.IDTOCoords(i)));
+            that.board.reveal(x, y);
 
-          if (that.board.numberOfHiddenTiles
-              === that.numberOfMines) {
-            // game won
-            that.gameOver(true);
+            if (that.board.numberOfHiddenTiles
+                === that.numberOfMines) {
+              // game won
+              that.gameOver(true);
+            }
+   
+            that.pBoard.recordConstraints(that.board);
+            //console.log("final constraints", that.pBoard.constraints.slice());
           }
- 
-          that.pBoard.recordConstraints(that.board);
-          //console.log("final constraints", that.pBoard.constraints.slice());
+        } else {
+          // tile is not hidden.
+          // If it reads n and has >= n flags around it, expose the remaining neighbours.
+          adjacentCoords = that.board.adjacentCoords(x, y);
+          nFlags = 0;
+          for (var coords of adjacentCoords) {
+            tile = that.board.tiles[coords[0]][coords[1]];
+            if (tile.isHidden && tile.isFlagged)
+              nFlags += 1;
+          }
+          if (nFlags >= clickedTile.numberOfAdjacentMines)
+            for (var coords of adjacentCoords) {
+              tile = that.board.tiles[coords[0]][coords[1]];
+              if (tile.isHidden && !tile.isFlagged)
+                that.expose(...coords);
+            }
         }
       }
     };
