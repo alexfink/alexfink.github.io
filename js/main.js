@@ -780,6 +780,8 @@ that.crumbleUniques = function(js) {
     */
     that.toggleFlag = function(x, y) {
       var clickedTile = that.board.tiles[x][y];
+      if (!clickedTile.isHidden)
+        return;
       clickedTile.toggleFlag();
       clickedTile.draw(false);
       if (clickedTile.isFlagged)
